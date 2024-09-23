@@ -1,0 +1,248 @@
+.navbar {
+    background-color: #F8F8FF;
+    /* border: 15px; */
+    box-shadow: 0px 4px 8px rgba(65, 64, 64, 0.2);
+}
+
+/* -------------------------------------------------------------------------- */
+
+.head {
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+.head h1 {
+    font-size: 35px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.select-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+}
+
+.select-row {
+    display: flex;
+    align-items: center;
+}
+
+label {
+    margin-right: 10px;
+}
+
+select {
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #b8b7b7;
+    border-radius: 8px;
+    max-width: 300px;
+    width: 250px;
+}
+
+/* ----------------------------------------------- */
+
+
+.container1 {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.headbi {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.inputEquationbi, .inputxlbi {
+    margin-bottom: 20px;
+}
+
+.inputEquationbi .input1, .inputxlbi .input-group {
+    margin-bottom: 10px;
+}
+
+.inputxlbi .input-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.input-item {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.input-item:last-child {
+    margin-right: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+.calbi p {
+    font-size: 18px;
+    text-align: center;
+    margin-top: 0px;
+}
+
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.calbi{
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 10px;
+}
+
+
+.table-container {
+    width: 80%;
+    max-width: 12000px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow-x: auto;
+    background-color: #fff;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+.grap {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.congrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.sizechart {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+}
+
+/* ///////////////////////////////////////////////////////////////// */
+
+.input2{
+    width: 30%;
+    padding: 10px;
+}
+
+.inputcramer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.container2{
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.matrix-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.matrix-input {
+    width: 60%;
+    padding: 5px;
+    margin-right: 5px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+
+span {
+    margin: 0 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h3{
+    padding: 20px;
+}
