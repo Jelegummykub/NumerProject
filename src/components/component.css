@@ -71,11 +71,13 @@ select {
     margin-bottom: 20px;
 }
 
-.inputEquationbi, .inputxlbi {
+.inputEquationbi,
+.inputxlbi {
     margin-bottom: 20px;
 }
 
-.inputEquationbi .input1, .inputxlbi .input-group {
+.inputEquationbi .input1,
+.inputxlbi .input-group {
     margin-bottom: 10px;
 }
 
@@ -98,7 +100,8 @@ label {
     margin-bottom: 5px;
 }
 
-input[type="text"], input[type="number"] {
+input[type="text"],
+input[type="number"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -122,7 +125,8 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
@@ -132,7 +136,7 @@ th {
     background-color: #f2f2f2;
 }
 
-.calbi{
+.calbi {
     margin-bottom: 20px;
     display: flex;
     justify-content: center;
@@ -158,7 +162,8 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
@@ -169,44 +174,71 @@ th {
 }
 
 .grap {
-    width: 80%;
+    width: 100%;
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    transition: all 0.3s ease-in-out;
 }
+
 
 .congrap {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-}
-
-.sizechart {
     width: 100%;
-    max-width: 600px;
     height: auto;
 }
 
+@media (max-width: 768px) {
+    .grap {
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .congrap {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .grap {
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .congrap {
+        padding: 8px;
+    }
+}
+
+
+
+
+
+
+
+
+
 /* ///////////////////////////////////////////////////////////////// */
 
-.input2{
+.input2 {
     width: 30%;
     padding: 10px;
 }
 
-.inputcramer{
+.inputcramer {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
 }
 
-.container2{
+.container2 {
     width: 80%;
     margin: 20px auto;
     padding: 20px;
@@ -243,6 +275,6 @@ h3 {
     margin-bottom: 20px;
 }
 
-h3{
+h3 {
     padding: 20px;
 }

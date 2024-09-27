@@ -1,16 +1,15 @@
 import { evaluate } from 'mathjs';
-import React, { useMemo, useState } from 'react';
-import { Chart } from 'react-charts';
+import React, { useState } from 'react';
+import Plot from "react-plotly.js";
 import './component.css';
 import NAvbar from './Navbar';
-
 const Graphicalmethod = () => {
     const [datachart, setDatachart] = useState([
-        {
-            label: "Xm",
-            data: [{ i: 0, v: 0 }],
+        // {
+        //     label: "Xm",
+        //     data: [{ i: 0, v: 0 }],
 
-        }
+        // }
     ])
 
     const [data, setData] = useState([]);
@@ -27,23 +26,24 @@ const Graphicalmethod = () => {
         }
     };
 
-    const primaryAxis = useMemo(
-        () => ({
-            getValue: datum => datum.i,
-        }),
-        [],
-    )
+    // const primaryAxis = useMemo(
+    //     () => ({
+    //         getValue: datum => datum.i,
+    //     }),
+    //     [],
+    // )
 
-    const secondaryAxes = useMemo(
-        () => [{
-            getValue: datum => datum.v,
-        }],
-        [],
-    )
+    // const secondaryAxes = useMemo(
+    //     () => [{
+    //         getValue: datum => datum.v,
+    //     }],
+    //     [],
+    // )
 
     const Calgrapical = (xl, xr) => { // y x
         let y = xl, z = xr;
         let obj = [];
+        let datachartTemp = [];
         let iter = 0;
         const MAX = 50;
 
@@ -75,16 +75,18 @@ const Graphicalmethod = () => {
                 Xm: y,
                 Xr: xr
             });
+            datachartTemp.push({ x: iter, y: y });
         }
 
         setData(obj);
-        setDatachart([
-            {
-                label: 'Xm',
-                data: obj.map(r => ({ i: r.iteration, v: r.Xm })),
-            },
-        ])
+        // setDatachart([
+        //     {
+        //         label: 'Xm',
+        //         data: obj.map(r => ({ i: r.iteration, v: r.Xm })),
+        //     },
+        // ])
         setX(y);
+        setDatachart(datachartTemp);
     };
 
     const inputEquation = (event) => {
@@ -106,6 +108,32 @@ const Graphicalmethod = () => {
         const xrnum = parseFloat(XR);
         Calgrapical(xlnum, xrnum);
     }
+
+    const chartData = {
+        data: [
+            {
+                type: "scatter",
+                mode: "markers+lines",
+                x: datachart.map((point) => point.x),
+                y: datachart.map((point) => point.y),
+                marker: { color: "red" },
+                line: { color: "black" },
+                name: "Graphical Method",
+            }
+        ],
+        layout: {
+            title: "Graphical Method",
+            xaxis: {
+                title: "Iteration",
+                zeroline: true,
+            },
+            yaxis: {
+                title: "Root (Xm)",
+                zeroline: true,
+            },
+        },
+    };
+
 
     return (
         <>
@@ -161,19 +189,18 @@ const Graphicalmethod = () => {
                 </div>
                 <div className='grap'>
                     <div className='congrap'>
-                        <div className='h-[400px] w-[400px]'>
-                            <Chart
-                                options={{
-                                    data: datachart,
-                                    primaryAxis,
-                                    secondaryAxes,
+                        <div className='w-full h-[40vh] md:h-[400px] lg:h-[500px] flex items-center justify-center'>
+                            <Plot
+                                data={chartData.data}
+                                layout={{
+                                    ...chartData.layout,
+                                    autosize: true,
                                 }}
+                                style={{ width: '100%', height: '100%' }}
                             />
-                            {/* sizechart */}
                         </div>
                     </div>
                 </div>
-
                 <div>
                     {data.length > 0 && (
                         <div className='table-container'>

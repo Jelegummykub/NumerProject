@@ -1,36 +1,18 @@
 import { evaluate } from 'mathjs';
-import React, { useMemo, useState } from 'react';
-import { Chart } from 'react-charts';
+import React, { useState } from 'react';
+import Plot from "react-plotly.js";
 import './component.css';
 import NAvbar from './Navbar';
 
 const Sample = () => {
-    const [datachart, setDatachart] = useState([
-        {
-            label: "Xm",
-            data: [{ i: 0, v: 0 }],
-
-        }
-    ]);
+    const [datachart, setDatachart] = useState([]);
     const [data, setData] = useState([]);
     const [x, setX] = useState(0)
     const [Equation, setEquation] = useState("");
     const [XL, setXL] = useState(0)
     const [XR, setXR] = useState(0)
     const [Error, seterror] = useState(0.000001)
-    const primaryAxis = useMemo(
-        () => ({
-            getValue: datum => datum.i,
-        }),
-        [],
-    )
-
-    const secondaryAxes = useMemo(
-        () => [{
-            getValue: datum => datum.v,
-        }],
-        [],
-    )
+    
 
     const error = (xold, xnew) => Math.abs((xnew - xold) / xnew) * 100;
 
@@ -40,6 +22,7 @@ const Sample = () => {
         const MAX = 50;
         const e = 0.000001;
         let obj = [];
+        let datachartTemp = [];
 
         do {
             scope = { x: xl };
@@ -61,16 +44,11 @@ const Sample = () => {
 
             xl = xr;
             xr = xm;
-
+            datachartTemp.push({ x: iter, y: xm });
         } while (ea > e && iter < MAX);
 
         setData(obj);
-        setDatachart([
-            {
-                label: 'Xm',
-                data: obj.map(r => ({ i: r.iteration, v: r.Xm })),
-            },
-        ])
+        setDatachart(datachartTemp);
         setX(xm);
     };
 
@@ -91,6 +69,31 @@ const Sample = () => {
         const xlnum = parseFloat(XL);
         const xrnum = parseFloat(XR);
         Calsecant(xlnum, xrnum);
+    };
+
+    const chartData = {
+        data: [
+            {
+                type: "scatter",
+                mode: "markers+lines",
+                x: datachart.map((point) => point.x),
+                y: datachart.map((point) => point.y),
+                marker: { color: "red" },
+                line: { color: "black" },
+                name: "Secant Method",
+            }
+        ],
+        layout: {
+            title: "Secant Method",
+            xaxis: {
+                title: "Iteration",
+                zeroline: true,
+            },
+            yaxis: {
+                title: "Root (Xm)",
+                zeroline: true,
+            },
+        },
     };
 
     return (
@@ -156,15 +159,15 @@ const Sample = () => {
                 </div>
                 <div className='grap'>
                     <div className='congrap'>
-                        <div className='h-[400px] w-[400px]'>
-                            <Chart
-                                options={{
-                                    data: datachart,
-                                    primaryAxis,
-                                    secondaryAxes,
+                        <div className='w-full h-[40vh] md:h-[400px] lg:h-[500px] flex items-center justify-center'>
+                            <Plot
+                                data={chartData.data}
+                                layout={{
+                                    ...chartData.layout,
+                                    autosize: true,
                                 }}
+                                style={{ width: '100%', height: '100%' }}
                             />
-                            {/* sizechart */}
                         </div>
                     </div>
                 </div>
