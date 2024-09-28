@@ -148,13 +148,57 @@ th {
 
 .table-container {
     width: 80%;
-    max-width: 12000px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
     border-radius: 8px;
-    overflow-x: auto;
-    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calculation-step {
+    margin-bottom: 10px;
+    padding: 10px;
+    /* background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); */
+    line-height: 1.6;
+    text-align: center;
+}
+
+.calculation-step h4 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+.result {
+    font-size: 15px;
+    margin-top: 15px;
+}
+
+.calculation-step .katex {
+    margin: 15px 0;
+}
+
+.calculation-step p {
+    font-size: 1.1rem;
+    margin: 5px 0;
+    color: #555;
+}
+
+.calculation-step .katex {
+    margin: 10px 0;
+}
+
+.calculation-step span {
+    margin: 0 2px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.table-container h3{
+    font-weight: bold;
 }
 
 table {
@@ -278,3 +322,4 @@ h3 {
 h3 {
     padding: 20px;
 }
+

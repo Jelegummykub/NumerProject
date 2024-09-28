@@ -4,6 +4,8 @@ import Elimination from './components/elimination';
 import FalsePosition from './components/false_position';
 import Graphical from './components/Grapical';
 import Home from './components/home';
+import Inversion from './components/inversion';
+import Jordan from './components/jordan';
 import Newton from './components/newton_raphson';
 import Onepiont from './components/onepoint_iteration';
 import Secant from './components/secant';
@@ -22,6 +24,8 @@ function App() {
                 <Route path="/Secant" element={<Secant />}/>
                 <Route path="/Cramer" element={<Cramer />}/>
                 <Route path="/Elimination" element={<Elimination />}/>
+                <Route path="/Jordan" element={<Jordan />}/>
+                <Route path="/Inversion" element={<Inversion />}/>
             </Routes>
         </Router>
     );

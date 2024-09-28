@@ -6,9 +6,7 @@ import { BlockMath } from 'react-katex';
 import Navbar from './Navbar';
 import './component.css';
 
-
-
-function ELimination() {
+function Jordan() {
 
     const [Answer, SetAnswer] = useState(Array(3).fill(0))
     const [Matrix, SetMatrix] = useState(Array(3).fill().map(() => Array(3).fill(0)))
@@ -44,89 +42,71 @@ function ELimination() {
         return latex;
     }
 
-    const calguass = (n, a, b) => {
+    const caljordan = (n, a, b) => {
         let obj = []
         let stepsArray = []
-        let size1 = n
-        // console.log("asdasd" + size1)
         const A = a.map(row => [...row])
-        for (let i = 0; i < n; i++) {
-            console.log(A[i])
-
-        }
         const B = [...b]
-        // for (let i = 0; i < n; i++) {
-        //     console.log(B[i])
-        // }
-
         const X = Array(n).fill(0)
-        // console.log("sdda"+X)
-
-        stepsArray.push(`\\text{Initial Matrix:} \\quad ` + matrixToLatex(A, B))
 
         //Forward
 
+        stepsArray.push(`\\text{Initial Matrix:} \\quad ` + matrixToLatex(A, B))
+
+
         for (let i = 0; i < n; i++) {
-            let temp = A[i][i]
-            stepsArray.push(`\\text{Normalize row } ${i + 1}: \\quad \\frac{\\text{Row }${i + 1}}{${temp}}`)
-            // console.log(temp)
+            let pivot = A[i][i]
+            stepsArray.push(`\\text{Normalize row } ${i + 1}: \\quad \\frac{\\text{Row }${i + 1}}{${pivot}}`)
+            // console.log(pivot)
             for (let j = i; j < n; j++) {
-                // const ratio = A[i][j] / temp
-                A[i][j] /= temp
-                // const ratio1 = A[i][j]
-                // console.log(ratio1) // -2 3 1 4 -5 1
+                // let temp = A[i][j]
+                // console.log("sds"+temp)
+                A[i][j] /= pivot
             }
-            // let ans = B[i] / temp
-            B[i] /= temp
-            // console.log(ans)
+            B[i] /= pivot
+
             stepsArray.push(matrixToLatex(A, B))
 
-            for (let k = i + 1; k < n; k++) {
-                let factor = A[k][i]
-                stepsArray.push(`\\text{Eliminate row } ${k + 1}: \\quad \\text{Row }${k + 1} - (${factor}) \\times \\text{Row }${i + 1}`)
-                // console.log(factor)
-                for (let j = i; j < n; j++) {
-                    A[k][j] -= factor * A[i][j]
-                    // let t = A[i][j]
-                    // console.log(t)
+            for (let k = 0; k < n; k++) {
+                if (k !== i) {
+                    let factor = A[k][i]
+                    stepsArray.push(`\\text{Eliminate row } ${k + 1}: \\quad \\text{Row }${k + 1} - (${factor}) \\times \\text{Row }${i + 1}`)
+
+                    for (let j = i; j < n; j++) {
+                        A[k][j] -= factor * A[i][j]
+                    }
+                    B[k] -= factor * B[i]
+                    Math.round(stepsArray.push(matrixToLatex(A, B)))
+
                 }
-                B[k] -= factor * B[i]
-                stepsArray.push(matrixToLatex(A, B))
             }
         }
 
-        stepsArray.push(`\\text{After Forward Elimination:} \\quad ` + matrixToLatex(A, B))
 
-        // Back
 
         for (let i = n - 1; i >= 0; i--) {
-            X[i] = B[i]
-            for (let j = i + 1; j < n; j++) {
-                X[i] -= A[i][j] * X[j]
-            }
-
-            obj.push({
-                Xn: Math.round(X[i])
-            })
-
-            stepsArray.push(`X_{${i + 1}} = ${B[i].toFixed(2)} - ${A[i].slice(i + 1).map((val, idx) => `(${val.toFixed(2)} \\times X_{${i + idx + 2}})`).join(' - ')} = ${X[i].toFixed(2)}`)
-
+            obj[i] = {
+                Xn: Math.round(B[i])
+            };
+            stepsArray.push(`X_{${i + 1}} = ${Math.round(B[i])}`);
         }
-        setData(obj.reverse())
+
+        setData(obj)
         setSteps(stepsArray);
+
+
 
     }
 
-    const calculateguass = () => {
-        calguass(dimitions, Matrix, Answer)
+    const calculatejordan = () => {
+        caljordan(dimitions, Matrix, Answer)
     }
 
     const resetForm = () => {
-        setdimitions(3)
         SetAnswer(Array(3).fill(0))
+        setdimitions(3)
         SetMatrix(Array(3).fill().map(() => Array(3).fill(0)))
         setData([])
-        setSteps([])
     }
 
 
@@ -136,7 +116,7 @@ function ELimination() {
             <div>
                 <div className='container1'>
                     <div className='headbi'>
-                        <h1>Gauss Elimination</h1>
+                        <h1>Gauss Jordan</h1>
                     </div>
                     <div className='inputcramer'>
                         <div className='P'>
@@ -156,7 +136,7 @@ function ELimination() {
                             </button>
                         </div>
                         <div>
-                            <button className="btn btn-neutral btn-sm" onClick={calculateguass} >
+                            <button className="btn btn-neutral btn-sm" onClick={calculatejordan} >
                                 Calculate
                             </button>
                         </div>
@@ -201,7 +181,7 @@ function ELimination() {
                         ))}
                     </div>
                 )}
-                <div>
+                {/* <div>
                     {data.length > 0 && (
                         <div className='table-container'>
                             <table>
@@ -220,10 +200,10 @@ function ELimination() {
                             </table>
                         </div>
                     )}
-                </div>
+                </div> */}
             </div>
         </>
     )
 }
 
-export default ELimination
+export default Jordan

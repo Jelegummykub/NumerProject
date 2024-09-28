@@ -27,6 +27,10 @@ function Home() {
                 navigate('/Cramer')
             }else if(select1 === "Linear" && select2 === "Elimination"){
                 navigate('/Elimination')
+            }else if(select1 === "Linear" && select2 === "Jordan"){
+                navigate('/Jordan')
+            }else if(select1 === "Linear" && select2 === "Inversion"){
+                navigate('/Inversion')
             }
             
         }
@@ -48,7 +52,8 @@ function Home() {
             setOptions([
                 { value: "Cramer", label: "Cramer's Rule" },
                 { value: "Elimination", label: "Gauss Elimination" },
-                { value: "Option 2-3", label: "Algebra Option 2-3" }
+                { value: "Jordan", label: "Gauss Jordan" },
+                { value: "Inversion", label: "Mathix Inversion" }
             ]);
         } else {
             setOptions([]);
