@@ -31,6 +31,10 @@ function Home() {
                 navigate('/Jordan')
             }else if(select1 === "Linear" && select2 === "Inversion"){
                 navigate('/Inversion')
+            }else if(select1 === "Linear" && select2 === "Ludecomposition"){
+                navigate('/Ludecomposition')
+            }else if(select1 === "Linear" && select2 === "Jacobi"){
+                navigate('/Jacobi')
             }
             
         }
@@ -53,7 +57,9 @@ function Home() {
                 { value: "Cramer", label: "Cramer's Rule" },
                 { value: "Elimination", label: "Gauss Elimination" },
                 { value: "Jordan", label: "Gauss Jordan" },
-                { value: "Inversion", label: "Mathix Inversion" }
+                { value: "Inversion", label: "Mathix Inversion" },
+                { value: "Ludecomposition" , label: "Lu Decomposition"},
+                { value: "Jacobi" , label: "Jacobi Iteration Medthod"}
             ]);
         } else {
             setOptions([]);

@@ -5,7 +5,9 @@ import FalsePosition from './components/false_position';
 import Graphical from './components/Grapical';
 import Home from './components/home';
 import Inversion from './components/inversion';
+import Jacobi from './components/jacobi';
 import Jordan from './components/jordan';
+import Ludecomposition from './components/ludecomposition';
 import Newton from './components/newton_raphson';
 import Onepiont from './components/onepoint_iteration';
 import Secant from './components/secant';
@@ -26,6 +28,8 @@ function App() {
                 <Route path="/Elimination" element={<Elimination />}/>
                 <Route path="/Jordan" element={<Jordan />}/>
                 <Route path="/Inversion" element={<Inversion />}/>
+                <Route path="/Ludecomposition" element={<Ludecomposition />}/>
+                <Route path="/Jacobi" element={<Jacobi />}/>
             </Routes>
         </Router>
     );
