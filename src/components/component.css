@@ -123,13 +123,14 @@ input[type="number"] {
 table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 12px;
 }
 
 th,
 td {
     border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+    text-align: center;
+    padding: 5px;
 }
 
 th {
@@ -153,6 +154,16 @@ th {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table-container1 {
+    width: 100%; /* ใช้ 90% เพื่อให้มีที่ว่างสำหรับขนาดหน้าจอเล็ก */
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* เพิ่มการเลื่อนแนวนอนเมื่อขนาดจอเล็ก */
 }
 
 .calculation-step {
@@ -310,7 +321,7 @@ th {
 
 span {
     margin: 0 10px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -322,4 +333,33 @@ h3 {
 h3 {
     padding: 20px;
 }
+
+
+/* ////////////////////////////////////////////////////////////////// */
+
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+}
+
+.checkbox-group{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    margin-bottom: 30px;
+
+}
+
+.checkbox-group input[type="number"] {
+    margin-left: 10px;
+    width: 100px;
+}
+
 

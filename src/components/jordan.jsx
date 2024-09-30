@@ -51,12 +51,12 @@ function Jordan() {
 
         //Forward
 
-        stepsArray.push(`\\text{Initial Matrix:} \\quad ` + matrixToLatex(A, B))
+        stepsArray.push(`\\text{Matrix A:} \\quad ` + matrixToLatex(A, B))
 
 
         for (let i = 0; i < n; i++) {
             let pivot = A[i][i]
-            stepsArray.push(`\\text{Normalize row } ${i + 1}: \\quad \\frac{\\text{Row }${i + 1}}{${pivot}}`)
+            stepsArray.push(`\\text{Give row } ${i + 1}: \\quad \\frac{\\text{Row }${i + 1}}{${pivot}}`)
             // console.log(pivot)
             for (let j = i; j < n; j++) {
                 // let temp = A[i][j]

@@ -34,18 +34,25 @@ function Inversion() {
         SetMatrix(newMatrix)
     }
 
-    const matrixToLatex = (A, B) => {
-        let latex = '\\begin{bmatrix} ';
-        for (let i = 0; i < A.length; i++) {
-            latex += A[i].join(' & ');
-            if (B && B[i] !== undefined) {
-                latex += ' & ' + B[i];
+    const matrixToLatex = (matrix) => {
+        if (Array.isArray(matrix[0])) {
+            // Handle 2D matrix
+            let latex = '\\begin{bmatrix} ';
+            for (let i = 0; i < matrix.length; i++) {
+                latex += matrix[i].join(' & ') + ' \\\\ ';
             }
-            latex += ' \\\\ ';
+            latex += '\\end{bmatrix}';
+            return latex;
+        } else {
+            // Handle 1D matrix (array), display vertically
+            let latex = '\\begin{bmatrix} ';
+            for (let i = 0; i < matrix.length; i++) {
+                latex += matrix[i] + ' \\\\ ';
+            }
+            latex += '\\end{bmatrix}';
+            return latex;
         }
-        latex += '\\end{bmatrix}';
-        return latex;
-    }
+    };
     
     const calinversion = (n, a, b) => {
         const A = math.matrix(a)
@@ -60,9 +67,10 @@ function Inversion() {
         const BArray = B.toArray()
         const xArray = x.toArray().map(Math.round)
     
-        stepsArray.push(`\\text{Initial Matrix A:} \\quad ${matrixToLatex(AArray, BArray)}`)
+        stepsArray.push(`\\text{Initial Matrix A:} \\quad ${matrixToLatex(AArray)}`)
+        stepsArray.push(`\\text{Initial Matrix B:} \\quad ${matrixToLatex(BArray)}`)
         stepsArray.push(`\\text{Inverse Matrix A:} \\quad ${matrixToLatex(Ainv.toArray())}`)
-        stepsArray.push(`\\text{Solution Vector x:} \\quad ${matrixToLatex([xArray], [])}`)
+        stepsArray.push(`\\text{ X:} \\quad ${matrixToLatex([xArray], [])}`)
     
         return stepsArray
     }

@@ -62,13 +62,13 @@ function ELimination() {
         const X = Array(n).fill(0)
         // console.log("sdda"+X)
 
-        stepsArray.push(`\\text{Initial Matrix:} \\quad ` + matrixToLatex(A, B))
+        stepsArray.push(`\\text{Matrix A :} \\quad ` + matrixToLatex(A, B))
 
         //Forward
 
         for (let i = 0; i < n; i++) {
             let temp = A[i][i]
-            stepsArray.push(`\\text{Normalize row } ${i + 1}: \\quad \\frac{\\text{Row }${i + 1}}{${temp}}`)
+            stepsArray.push(`\\text{Give row } ${i + 1}: \\quad \\frac{\\text{Row }${i + 1}}{${temp}}`)
             // console.log(temp)
             for (let j = i; j < n; j++) {
                 // const ratio = A[i][j] / temp
@@ -201,7 +201,7 @@ function ELimination() {
                         ))}
                     </div>
                 )}
-                <div>
+                {/* <div>
                     {data.length > 0 && (
                         <div className='table-container'>
                             <table>
@@ -220,7 +220,7 @@ function ELimination() {
                             </table>
                         </div>
                     )}
-                </div>
+                </div> */}
             </div>
         </>
     )

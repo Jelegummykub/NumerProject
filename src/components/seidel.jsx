@@ -6,9 +6,9 @@ import { BlockMath } from 'react-katex';
 import Navbar from './Navbar';
 import './component.css';
 
-function Jacobi() {
+function Seidel() {
 
-  const [Answer, SetAnswer] = useState(Array(3).fill(0))
+    const [Answer, SetAnswer] = useState(Array(3).fill(0))
   const [Matrix, SetMatrix] = useState(Array(3).fill().map(() => Array(3).fill(0)))
   const [dimitions, setdimitions] = useState(3)
   const [StartX, SetStartX] = useState(Array(3).fill(0))
@@ -64,14 +64,15 @@ function Jacobi() {
         }
         newX[i] = (b[i] - temp) / A[i][i];
         e1 += Math.abs(newX[i] - X[i]);
+        X[i] = newX[i]
       }
 
-      X = [...newX];
+    //   X = [...newX];
       iteration++;
 
       obj.push({
         iteration: iteration,
-        X: [...X],
+        X: X,
         error: e1
       });
 
@@ -93,14 +94,13 @@ function Jacobi() {
   }
 
 
-
-  return (
-    <>
-      <Navbar />
-      <div>
+    return (
+        <>
+            <Navbar />
+            <div>
         <div className='container1'>
           <div className='headbi'>
-            <h1>Jacobi Method</h1>
+            <h1>Gauss Seidel Medthod</h1>
           </div>
           <div className='inputcramer'>
             <div className='P'>
@@ -161,6 +161,7 @@ function Jacobi() {
               </div>
             )}
           </div>
+
         </div>
         <div>
           {data.length > 0 && (
@@ -191,8 +192,8 @@ function Jacobi() {
           )}
         </div>
       </div>
-    </>
-  )
+        </>
+    )
 }
 
-export default Jacobi
+export default Seidel
