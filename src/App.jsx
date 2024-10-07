@@ -10,10 +10,13 @@ import Jacobi from './components/jacobi';
 import Jordan from './components/jordan';
 import Lagrane from './components/Lagrane';
 import Ludecomposition from './components/ludecomposition';
+import NewtonDD from './components/Newton';
 import Newton from './components/newton_raphson';
 import Onepiont from './components/onepoint_iteration';
+import Regression from './components/regression';
 import Secant from './components/secant';
 import Seidel from './components/seidel';
+import Spline from './components/spline';
 import TargetPage from './components/test';
 
 function App() {
@@ -36,6 +39,9 @@ function App() {
                 <Route path="/Seidel" element={<Seidel />}/>
                 <Route path="/Gradient" element={<Gradient />}/>
                 <Route path="/Lagrange" element={<Lagrane />}/>
+                <Route path="/Newton" element={<NewtonDD />}/>
+                <Route path="/Spline" element={<Spline />}/>
+                <Route path="/Regression" element={<Regression />}/>
             </Routes>
         </Router>
     );

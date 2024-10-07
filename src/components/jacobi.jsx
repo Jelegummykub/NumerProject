@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'katex/dist/katex.min.css';
 import React, { useState } from 'react';
 import { BlockMath } from 'react-katex';
+import Plot from "react-plotly.js";
 import Navbar from './Navbar';
 import './component.css';
 
@@ -13,6 +14,11 @@ function Jacobi() {
   const [dimitions, setdimitions] = useState(3)
   const [StartX, SetStartX] = useState(Array(3).fill(0))
   const [data, setData] = useState([])
+  const [datachart, setDatachart] = useState([])
+  // const [datachart1, setDatachart1] = useState([])
+  // const [datachart2, setDatachart2] = useState([])
+
+
 
   const inputsize = (event) => {
     const size = parseInt(event.target.value)
@@ -48,6 +54,7 @@ function Jacobi() {
     let obj = []
     let e1 = 1
     let iteration = 0
+    let datacharttemp = Array(n).fill().map(() => []);
 
     while (e1 > e && iteration < Maxiteration) {
       e1 = 0;
@@ -59,7 +66,7 @@ function Jacobi() {
         for (let j = 0; j < n; j++) {
           if (i !== j) {
             temp += A[i][j] * X[j]
-            console.log(temp)
+            // console.log(temp)
           }
         }
         newX[i] = (b[i] - temp) / A[i][i];
@@ -67,7 +74,13 @@ function Jacobi() {
       }
 
       X = [...newX];
+      // console.log(X)
       iteration++;
+
+      for (let i = 0; i < n; i++) {
+        datacharttemp[i].push(X[i])
+      }
+
 
       obj.push({
         iteration: iteration,
@@ -76,6 +89,7 @@ function Jacobi() {
       });
 
       setData(obj)
+      setDatachart(datacharttemp)
       // console.log(`Iteration ${iteration}: X = [${X.join(', ')}], Error = ${e1}`);
     }
   }
@@ -92,6 +106,23 @@ function Jacobi() {
     setData([])
   }
 
+  const chartData = {
+    data: datachart.map((dataset, i) => ({
+      type: "scatter",
+      mode: "lines+markers",
+      y: dataset,
+      marker: { color: ['red', 'blue', 'green'][i] },
+      line: { color: ['red', 'blue', 'green'][i] },
+      name: `X${i + 1}`
+    })),
+    layout: {
+      title: "Jacobi Method",
+      yaxis: {
+        title: "Root (Xm)",
+        zeroline: true,
+      },
+    },
+  };
 
 
   return (
@@ -160,6 +191,20 @@ function Jacobi() {
                 ))}
               </div>
             )}
+          </div>
+        </div>
+        <div className='grap'>
+          <div className='congrap'>
+            <div className='w-full h-[40vh] md:h-[400px] lg:h-[500px] flex items-center justify-center'>
+              <Plot
+                data={chartData.data}
+                layout={{
+                  ...chartData.layout,
+                  autosize: true,
+                }}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </div>
           </div>
         </div>
         <div>

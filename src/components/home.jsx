@@ -41,7 +41,14 @@ function Home() {
                 navigate('/Gradient')
             } else if (select1 === "Interpolation" && select2 === "Lagrange") {
                 navigate('/Lagrange')
+            } else if (select1 === "Interpolation" && select2 === "Newton") {
+                navigate('/Newton')
+            } else if (select1 === "Interpolation" && select2 === "Spline") {
+                navigate('/Spline')
+            } else if (select1 === "Extrapolation" && select2 === "Regression") {
+                navigate('/Regression')
             }
+
 
         }
     }, [select1, select2, navigate]);
@@ -71,7 +78,13 @@ function Home() {
             ]);
         } else if (value === "Interpolation") {
             setOptions([
+                { value: "Newton", label: "Newton's Divided Difference" },
                 { value: "Lagrange", label: "Lagrange Interpolation" },
+                { value: "Spline", label: "Spline interpolation" },
+            ]);
+        } else if (value === "Extrapolation") {
+            setOptions([
+                { value: "Regression", label: "Simple Regression extrapolation" },
             ]);
         } else {
             setOptions([]);
@@ -96,6 +109,7 @@ function Home() {
                                 <option value="Root44">Root of Equation</option>
                                 <option value="Linear">Linear Algebra Equation</option>
                                 <option value="Interpolation">Interpolation</option>
+                                <option value="Extrapolation">Extrapolation</option>
                             </select>
                         </div>
                     </div>

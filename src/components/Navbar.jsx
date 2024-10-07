@@ -7,7 +7,9 @@ function Navbar() {
         <>
             <div className="navbar bg-base-100 ">
                 <div className="flex-1">
-                    <a className="btn btn-ghost text-xl">Nummerical Method</a>
+                    <Link to='/'>
+                        <a className="btn btn-ghost text-xl">Nummerical Method</a>
+                    </Link>
                 </div>
                 <div className="flex-none">
                     <ul className="menu menu-horizontal px-1">

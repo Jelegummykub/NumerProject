@@ -1,77 +1,41 @@
-import 'katex/dist/katex.min.css';
-import React, { useState } from 'react';
-import { BlockMath } from 'react-katex';
-import Navbar from './Navbar';
-import './component.css';
+import React, { useState } from 'react'
+import Navbar from './Navbar'
 
-function Lagrane() {
-    const [Size, SetSize] = useState(3)
-    const [ValueX, SetValueX] = useState(0)
-    const [selectedPoints, setSelectedPoints] = useState([])
-    const [xValues, setXValues] = useState(Array(3).fill(0))
-    const [fx, setFx] = useState(Array(3).fill(0))
-    const [Steps, setSteps] = useState([])
+function Spline() {
+    const [Size , SetSize] = useState(3)
+    const [ValueX , SetValueX] = useState(0)
+    const [selectedPoints , setSelectedPoints] = useState([])
+    const [xValues , setXValues] = useState(Array(3).fill(0))
+    const [fx , setFx] = useState(Array(3).fill(0))
+    const [Steps , setSteps] = useState([])
 
     const inputsize = (event) => {
         const size = parseInt(event.target.value)
-        SetSize(size);
+        SetSize(size)
         setXValues(Array(size).fill(0))
         setFx(Array(size).fill(0))
-    };
+    }
 
     const inputX = (event) => {
         SetValueX(event.target.value)
     }
 
     const handleCheckboxChange = (index) => {
-        const updatedPoints = [...selectedPoints];
-        updatedPoints[index] = !updatedPoints[index];
-        setSelectedPoints(updatedPoints);
+        const updatedPoints = [...selectedPoints]
+        updatedPoints[index] = !updatedPoints[index]
+        setSelectedPoints[updatedPoints]
     }
 
-    const handleXChange = (index, value) => {
+    const handleXChange = (index , value) => {
         const updatedX = [...xValues]
         updatedX[index] = parseFloat(value)
         setXValues(updatedX)
     }
 
-    const handleFxChange = (index, value) => {
-        const updatedFx = [...fx];
+    const handleFxChange = (index , value) => {
+        const updatedFx = [...fx]
         updatedFx[index] = parseFloat(value)
-        setFx(updatedFx);
-    }
-
-
-    const calculateLagrange = () => {
-        const selected = selectedPoints.map((checked, i) => checked ? i : null).filter(i => i !== null);
-        let StepsArray = []
-
-
-        if (selected.length < 2) {
-            alert("กรุณากรอกมากกว่า 2 จุด");
-            return;
-        }
-
-        let result = 0;
-        StepsArray.push(`\\text{Lagrange Interpolation}`)
-
-
-        for (let i = 0; i < selected.length; i++) {
-            let temp = fx[selected[i]]
-            console.log(temp)
-            let t1 = `f(x_{${selected[i]}}) = ${fx[selected[i]].toFixed(6)}`
-            let t2 = `L_{${selected[i]}}(x) = ${fx[selected[i]].toFixed(6)}`
-            for (let j = 0; j < selected.length; j++) {
-                if (i !== j) {
-                    temp *= (ValueX - xValues[selected[j]]) / (xValues[selected[i]] - xValues[selected[j]])
-                    t2 += `\\left(\\frac{x - x_{${selected[j]}}}{x_{${selected[i]}} - x_{${selected[j]}}}\\right)`
-                }
-            }
-            result += temp
-            StepsArray.push(`${t1} \\cdot ${t2}`)
-        }
-        StepsArray.push(`\\text{Result: } L(${ValueX}) = ${result.toFixed(6)}`)
-        setSteps(StepsArray)
+        setFx(updatedFx)
     }
 
     return (
@@ -80,7 +44,7 @@ function Lagrane() {
             <div>
                 <div className='container1'>
                     <div className='headbi'>
-                        <h1>Lagrange Interpolation</h1>
+                        <h1>Newton's Divided Difference</h1>
                     </div>
                     <div className='inputxlbi'>
                         <div className='input-group'>
@@ -127,7 +91,7 @@ function Lagrane() {
                         ))}
                     </div>
                     <div className='calbi'>
-                        <button className="btn btn-neutral btn-sm" onClick={calculateLagrange} >
+                        <button className="btn btn-neutral btn-sm" onClick={calnewton} >
                             Calculate
                         </button>
                     </div>
@@ -147,8 +111,9 @@ function Lagrane() {
                     </div>
                 )}
             </div>
+
         </>
     )
 }
 
-export default Lagrane
+export default Spline

@@ -2,76 +2,65 @@ import 'katex/dist/katex.min.css';
 import React, { useState } from 'react';
 import { BlockMath } from 'react-katex';
 import Navbar from './Navbar';
-import './component.css';
 
-function Lagrane() {
-    const [Size, SetSize] = useState(3)
-    const [ValueX, SetValueX] = useState(0)
-    const [selectedPoints, setSelectedPoints] = useState([])
-    const [xValues, setXValues] = useState(Array(3).fill(0))
-    const [fx, setFx] = useState(Array(3).fill(0))
-    const [Steps, setSteps] = useState([])
+
+function Regression() {
+    const [Size , SetSize] = useState(3)
+    const [ValueX , SetValueX] = useState(0)
+    const [xValues , setXValues] = useState(Array(3).fill(0))
+    const [fx , setFx] = useState(Array(3).fill(0))
+    const [Steps , setSteps] = useState([])
 
     const inputsize = (event) => {
         const size = parseInt(event.target.value)
-        SetSize(size);
-        setXValues(Array(size).fill(0))
         setFx(Array(size).fill(0))
-    };
+        setXValues(Array(size).fill(0))
+        SetSize(size)
+    }
 
     const inputX = (event) => {
         SetValueX(event.target.value)
     }
 
-    const handleCheckboxChange = (index) => {
-        const updatedPoints = [...selectedPoints];
-        updatedPoints[index] = !updatedPoints[index];
-        setSelectedPoints(updatedPoints);
+    const handleFxChange = (index , value) => {
+        const updatedFx = [...fx]
+        updatedFx[index] = parseFloat(value)
+        setFx(updatedFx)
     }
 
-    const handleXChange = (index, value) => {
+    const handleXChange = (index , value) => {
         const updatedX = [...xValues]
         updatedX[index] = parseFloat(value)
         setXValues(updatedX)
     }
 
-    const handleFxChange = (index, value) => {
-        const updatedFx = [...fx];
-        updatedFx[index] = parseFloat(value)
-        setFx(updatedFx);
-    }
-
-
-    const calculateLagrange = () => {
-        const selected = selectedPoints.map((checked, i) => checked ? i : null).filter(i => i !== null);
+    const calLeast = () => {
         let StepsArray = []
+        const n = Size
+        // console.log(n)
+        let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0
 
-
-        if (selected.length < 2) {
-            alert("กรุณากรอกมากกว่า 2 จุด");
-            return;
+        for (let i = 0; i < n; i++) {
+            sumX += xValues[i]
+            sumY += fx[i]
+            sumXY += xValues[i] * fx[i]
+            sumX2 += xValues[i] * xValues[i]
         }
 
-        let result = 0;
-        StepsArray.push(`\\text{Lagrange Interpolation}`)
+        const denominator = (n * sumX2) - (sumX * sumX)
+        const slope = (n * sumXY - sumX * sumY) / denominator
+        const intercept = (sumY * sumX2 - sumX * sumXY) / denominator
+        const result = (slope*ValueX) + (intercept)
 
+        StepsArray.push(`Slope (m) = ${slope.toFixed(4)}`)
+        StepsArray.push(`Intercept (b) = ${intercept.toFixed(4)}`)
+        StepsArray.push(`y = ${slope.toFixed(4)}x + ${intercept.toFixed(4)}`)
+        StepsArray.push(`F(${ValueX}) = ${result.toFixed(4)} #`)
 
-        for (let i = 0; i < selected.length; i++) {
-            let temp = fx[selected[i]]
-            console.log(temp)
-            let t1 = `f(x_{${selected[i]}}) = ${fx[selected[i]].toFixed(6)}`
-            let t2 = `L_{${selected[i]}}(x) = ${fx[selected[i]].toFixed(6)}`
-            for (let j = 0; j < selected.length; j++) {
-                if (i !== j) {
-                    temp *= (ValueX - xValues[selected[j]]) / (xValues[selected[i]] - xValues[selected[j]])
-                    t2 += `\\left(\\frac{x - x_{${selected[j]}}}{x_{${selected[i]}} - x_{${selected[j]}}}\\right)`
-                }
-            }
-            result += temp
-            StepsArray.push(`${t1} \\cdot ${t2}`)
-        }
-        StepsArray.push(`\\text{Result: } L(${ValueX}) = ${result.toFixed(6)}`)
         setSteps(StepsArray)
+
+        
+    
     }
 
     return (
@@ -80,7 +69,7 @@ function Lagrane() {
             <div>
                 <div className='container1'>
                     <div className='headbi'>
-                        <h1>Lagrange Interpolation</h1>
+                        <h1>Least-Squares Regression</h1>
                     </div>
                     <div className='inputxlbi'>
                         <div className='input-group'>
@@ -105,11 +94,6 @@ function Lagrane() {
                     <div className='checkbox-group'>
                         {Array.from({ length: Size }, (_, i) => (
                             <div key={i}>
-                                <input
-                                    type="checkbox"
-                                    checked={selectedPoints[i] || false}
-                                    onChange={() => handleCheckboxChange(i)}
-                                />
                                 <span>{i + 1} .</span>
                                 <input
                                     type="number"
@@ -127,7 +111,7 @@ function Lagrane() {
                         ))}
                     </div>
                     <div className='calbi'>
-                        <button className="btn btn-neutral btn-sm" onClick={calculateLagrange} >
+                        <button className="btn btn-neutral btn-sm" onClick={calLeast} >
                             Calculate
                         </button>
                     </div>
@@ -151,4 +135,4 @@ function Lagrane() {
     )
 }
 
-export default Lagrane
+export default Regression

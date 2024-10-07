@@ -2,9 +2,8 @@ import 'katex/dist/katex.min.css';
 import React, { useState } from 'react';
 import { BlockMath } from 'react-katex';
 import Navbar from './Navbar';
-import './component.css';
 
-function Lagrane() {
+function Newton() {
     const [Size, SetSize] = useState(3)
     const [ValueX, SetValueX] = useState(0)
     const [selectedPoints, setSelectedPoints] = useState([])
@@ -42,35 +41,40 @@ function Lagrane() {
     }
 
 
-    const calculateLagrange = () => {
-        const selected = selectedPoints.map((checked, i) => checked ? i : null).filter(i => i !== null);
-        let StepsArray = []
-
+    const calnewton = () => {
+        const selected = selectedPoints.map((checked, i) => checked ? i : null).filter(i => i !== null)
 
         if (selected.length < 2) {
-            alert("กรุณากรอกมากกว่า 2 จุด");
-            return;
+            alert("กรุณากรอกมากกว่า 2 จุด")
+            return
         }
 
-        let result = 0;
-        StepsArray.push(`\\text{Lagrange Interpolation}`)
+        let StepsArray = []
+        const n = selected.length
+        const diffTable = Array.from({ length: n }, () => Array(n).fill(0))
 
+        for (let i = 0; i < n; i++) {
+            diffTable[i][0] = fx[selected[i]]
+        }
 
-        for (let i = 0; i < selected.length; i++) {
-            let temp = fx[selected[i]]
-            console.log(temp)
-            let t1 = `f(x_{${selected[i]}}) = ${fx[selected[i]].toFixed(6)}`
-            let t2 = `L_{${selected[i]}}(x) = ${fx[selected[i]].toFixed(6)}`
-            for (let j = 0; j < selected.length; j++) {
-                if (i !== j) {
-                    temp *= (ValueX - xValues[selected[j]]) / (xValues[selected[i]] - xValues[selected[j]])
-                    t2 += `\\left(\\frac{x - x_{${selected[j]}}}{x_{${selected[i]}} - x_{${selected[j]}}}\\right)`
-                }
+        // Fill the divided difference table
+        for (let j = 1; j < n; j++) {
+            for (let i = 0; i < n - j; i++) {
+                diffTable[i][j] = (diffTable[i + 1][j - 1] - diffTable[i][j - 1]) / (xValues[selected[i + j]] - xValues[selected[i]])
+                console.log(diffTable[i][j])
             }
-            result += temp
-            StepsArray.push(`${t1} \\cdot ${t2}`)
         }
-        StepsArray.push(`\\text{Result: } L(${ValueX}) = ${result.toFixed(6)}`)
+
+        let result = diffTable[0][0]
+        let term = 1
+        StepsArray.push(`\\text{Newton's Divided Difference Table}`)
+        for (let i = 1; i < n; i++) {
+            term *= (ValueX - xValues[selected[i - 1]])
+            result += diffTable[0][i] * term;
+            StepsArray.push(`\\text{C ${i}: } ${diffTable[0][i]} \\cdot (x - x_{${selected[i - 1]}})`)
+        }
+
+        StepsArray.push(`\\text{Result: } Fx(${ValueX}) = ${result}`)
         setSteps(StepsArray)
     }
 
@@ -80,7 +84,7 @@ function Lagrane() {
             <div>
                 <div className='container1'>
                     <div className='headbi'>
-                        <h1>Lagrange Interpolation</h1>
+                        <h1>Newton's Divided Difference</h1>
                     </div>
                     <div className='inputxlbi'>
                         <div className='input-group'>
@@ -127,7 +131,7 @@ function Lagrane() {
                         ))}
                     </div>
                     <div className='calbi'>
-                        <button className="btn btn-neutral btn-sm" onClick={calculateLagrange} >
+                        <button className="btn btn-neutral btn-sm" onClick={calnewton} >
                             Calculate
                         </button>
                     </div>
@@ -151,4 +155,4 @@ function Lagrane() {
     )
 }
 
-export default Lagrane
+export default Newton;
