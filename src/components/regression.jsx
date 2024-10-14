@@ -1,34 +1,41 @@
 import 'katex/dist/katex.min.css';
+import { det } from 'mathjs';
 import React, { useState } from 'react';
 import { BlockMath } from 'react-katex';
 import Navbar from './Navbar';
 
 
+
 function Regression() {
-    const [Size , SetSize] = useState(3)
-    const [ValueX , SetValueX] = useState(0)
-    const [xValues , setXValues] = useState(Array(3).fill(0))
-    const [fx , setFx] = useState(Array(3).fill(0))
-    const [Steps , setSteps] = useState([])
+    const [Size, SetSize] = useState(3)
+    const [ValueX, SetValueX] = useState(0)
+    const [Morder, SetMorder] = useState(1)
+    const [xValues, setXValues] = useState(Array(3).fill(0))
+    const [fx, setFx] = useState(Array(3).fill(0))
+    const [Steps, setSteps] = useState([])
 
     const inputsize = (event) => {
         const size = parseInt(event.target.value)
+        SetSize(size)
         setFx(Array(size).fill(0))
         setXValues(Array(size).fill(0))
-        SetSize(size)
     }
 
     const inputX = (event) => {
         SetValueX(event.target.value)
     }
 
-    const handleFxChange = (index , value) => {
+    const inputMorder = (event) => {
+        SetMorder((parseInt(event.target.value)))
+    }
+
+    const handleFxChange = (index, value) => {
         const updatedFx = [...fx]
         updatedFx[index] = parseFloat(value)
         setFx(updatedFx)
     }
 
-    const handleXChange = (index , value) => {
+    const handleXChange = (index, value) => {
         const updatedX = [...xValues]
         updatedX[index] = parseFloat(value)
         setXValues(updatedX)
@@ -36,31 +43,54 @@ function Regression() {
 
     const calLeast = () => {
         let StepsArray = []
-        const n = Size
-        // console.log(n)
-        let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0
+        const m = parseInt(Morder)
+        const matrixSize = m + 1
+        // console.log(matrixSize)
+        const matrix = Array.from({ length: matrixSize }, () => Array(matrixSize).fill(0));
+        // console.log(coefficients)
+        const matrixB = Array(matrixSize).fill(0);
 
-        for (let i = 0; i < n; i++) {
-            sumX += xValues[i]
-            sumY += fx[i]
-            sumXY += xValues[i] * fx[i]
-            sumX2 += xValues[i] * xValues[i]
+
+        for (let i = 0; i < matrixSize; i++) {
+            for (let j = 0; j < matrixSize; j++) {
+                matrix[i][j] = xValues.reduce((acc, x) => acc + Math.pow(x, i + j), 0);
+            }
+            matrixB[i] = xValues.reduce((acc, x, index) => acc + fx[index] * Math.pow(x, i), 0);
         }
 
-        const denominator = (n * sumX2) - (sumX * sumX)
-        const slope = (n * sumXY - sumX * sumY) / denominator
-        const intercept = (sumY * sumX2 - sumX * sumXY) / denominator
-        const result = (slope*ValueX) + (intercept)
+        // console.log(matrix)
+        // console.log(matrixB)
 
-        StepsArray.push(`Slope (m) = ${slope.toFixed(4)}`)
-        StepsArray.push(`Intercept (b) = ${intercept.toFixed(4)}`)
-        StepsArray.push(`y = ${slope.toFixed(4)}x + ${intercept.toFixed(4)}`)
-        StepsArray.push(`F(${ValueX}) = ${result.toFixed(4)} #`)
+        const detA = det(matrix)
+        // console.log(detA)
+
+        const solutions = []
+
+        const matrixLatex = `\\begin{bmatrix} ${matrix.map(row => row.join(' & ')).join(' \\\\ ')} \\end{bmatrix}`;
+        const constantsLatex = `\\begin{bmatrix} ${matrixB.join(' & ')} \\end{bmatrix}`;
+
+        StepsArray.push(`\\text{Coefficient matrix: } ${matrixLatex}`);
+        StepsArray.push(`\\text{Constants matrix: } ${constantsLatex}`);
+
+        for (let i = 0; i < matrixSize; i++) {
+            const modify = matrix.map(row => [...row])
+            // console.log(modify)
+            for (let j = 0; j < matrixSize; j++) {
+                modify[j][i] = matrixB[j]
+                // console.log(modify[j][i])
+            }
+            const detAi = det(modify)
+            solutions.push(detAi / detA)
+            StepsArray.push(`x_${i} = \\frac{\\text{det}(A_{${i}})}{\\text{det}(A)} = \\frac{${detAi.toFixed(6)}}{${detA.toFixed(6)}} = ${solutions[i].toFixed(6)}`);
+        }
+
+        console.log("Solutions:", solutions);
+
+        solutions.forEach((solution, i) => {
+            StepsArray.push(`x_${i} = ${solution.toFixed(6)}`)
+        })
 
         setSteps(StepsArray)
-
-        
-    
     }
 
     return (
@@ -87,6 +117,13 @@ function Regression() {
                                     type="number"
                                     value={ValueX}
                                     onChange={inputX}
+                                />
+                            </div>
+                            <div className='input-item'>
+                                <label>M order</label>
+                                <input type="number"
+                                    value={Morder}
+                                    onChange={inputMorder}
                                 />
                             </div>
                         </div>

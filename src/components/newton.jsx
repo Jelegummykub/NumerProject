@@ -13,19 +13,19 @@ function Newton() {
 
     const inputsize = (event) => {
         const size = parseInt(event.target.value)
-        SetSize(size);
+        SetSize(size)
         setXValues(Array(size).fill(0))
-        setFx(Array(size).fill(0))
-    };
+        setFx(Array(size), fill(0))
+    }
 
     const inputX = (event) => {
         SetValueX(event.target.value)
     }
 
     const handleCheckboxChange = (index) => {
-        const updatedPoints = [...selectedPoints];
-        updatedPoints[index] = !updatedPoints[index];
-        setSelectedPoints(updatedPoints);
+        const updatedPoints = [...selectedPoints]
+        updatedPoints[index] = !updatedPoints[index]
+        setSelectedPoints(updatedPoints)
     }
 
     const handleXChange = (index, value) => {
@@ -35,47 +35,68 @@ function Newton() {
     }
 
     const handleFxChange = (index, value) => {
-        const updatedFx = [...fx];
+        const updatedFx = [...fx]
         updatedFx[index] = parseFloat(value)
-        setFx(updatedFx);
+        setFx(updatedFx)
     }
 
+    const recursive = (xValues, fx) => {
+        const n = xValues.length
+        // console.log(n)
+        let temp1 = Array.from({ length: n }, () => Array(n).fill(0))
+        // console.log(temp1)
+
+        for (let i = 0; i < n; i++) {
+            temp1[i][0] = fx[i]
+            // console.log(temp1[i][0])
+        }
+
+        for (let j = 1; j < n; j++) {
+            for (let i = 0; i < n - j; i++) {
+                temp1[i][j] = (temp1[i + 1][j - 1] - temp1[i][j - 1]) / (xValues[i + j] - xValues[i])
+                // console.log(temp1[i][j])
+            }
+        }
+
+        // console.log(temp1[0])
+        return temp1[0]
+
+
+    }
 
     const calnewton = () => {
-        const selected = selectedPoints.map((checked, i) => checked ? i : null).filter(i => i !== null)
-
+        const selected = selectedPoints.map((checked, i) => checked ? i : null).filter(i => i != null)
         if (selected.length < 2) {
-            alert("กรุณากรอกมากกว่า 2 จุด")
-            return
+            alert("กรุณากรอกมากกว่า 2 จุด");
+            return;
         }
 
         let StepsArray = []
         const n = selected.length
-        const diffTable = Array.from({ length: n }, () => Array(n).fill(0))
+        // console.log(n)
+        const selectedX = selected.map((i => xValues[i]))
+        // console.log(selectedX)
+        const selectedFx = selected.map((i => fx[i]))
 
-        for (let i = 0; i < n; i++) {
-            diffTable[i][0] = fx[selected[i]]
-        }
+        const temp = recursive(selectedX, selectedFx)
+        // console.log(temp)
 
-        // Fill the divided difference table
-        for (let j = 1; j < n; j++) {
-            for (let i = 0; i < n - j; i++) {
-                diffTable[i][j] = (diffTable[i + 1][j - 1] - diffTable[i][j - 1]) / (xValues[selected[i + j]] - xValues[selected[i]])
-                console.log(diffTable[i][j])
-            }
-        }
+        const temp99 = temp.map((c, idx) => `X${idx} = ${c}`).join(',');
+        StepsArray.push(`\\text{Value: } ${temp99}`);
 
-        let result = diffTable[0][0]
-        let term = 1
-        StepsArray.push(`\\text{Newton's Divided Difference Table}`)
+        let result = temp[0]
+        // console.log(result)
+        let temp2 = 1
+        let resultLatex = `${temp[0]}`
+
         for (let i = 1; i < n; i++) {
-            term *= (ValueX - xValues[selected[i - 1]])
-            result += diffTable[0][i] * term;
-            StepsArray.push(`\\text{C ${i}: } ${diffTable[0][i]} \\cdot (x - x_{${selected[i - 1]}})`)
+            temp2 *= (ValueX - selected[i - 1])
+            result += temp[i] * temp2
+            resultLatex += ` + (${temp[i]}) \\cdot (${ValueX} - ${selectedX[i - 1]})`
         }
-
+        StepsArray.push(`Fx(${ValueX}) = ${resultLatex}`);
         StepsArray.push(`\\text{Result: } Fx(${ValueX}) = ${result}`)
-        setSteps(StepsArray)
+        setSteps(StepsArray);
     }
 
     return (

@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
-import Navbar from './Navbar'
+import 'katex/dist/katex.min.css';
+import React, { useState } from 'react';
+import { BlockMath } from 'react-katex';
+import Navbar from './Navbar';
 
 function Spline() {
-    const [Size , SetSize] = useState(3)
-    const [ValueX , SetValueX] = useState(0)
-    const [selectedPoints , setSelectedPoints] = useState([])
-    const [xValues , setXValues] = useState(Array(3).fill(0))
-    const [fx , setFx] = useState(Array(3).fill(0))
-    const [Steps , setSteps] = useState([])
+    const [Size, SetSize] = useState(3)
+    const [ValueX, SetValueX] = useState(0)
+    const [xValues, setXValues] = useState(Array(3).fill(0))
+    const [fx, setFx] = useState(Array(3).fill(0))
+    const [Steps, setSteps] = useState([])
 
     const inputsize = (event) => {
         const size = parseInt(event.target.value)
@@ -20,22 +21,46 @@ function Spline() {
         SetValueX(event.target.value)
     }
 
-    const handleCheckboxChange = (index) => {
-        const updatedPoints = [...selectedPoints]
-        updatedPoints[index] = !updatedPoints[index]
-        setSelectedPoints[updatedPoints]
-    }
 
-    const handleXChange = (index , value) => {
+
+    const handleXChange = (index, value) => {
         const updatedX = [...xValues]
         updatedX[index] = parseFloat(value)
         setXValues(updatedX)
     }
 
-    const handleFxChange = (index , value) => {
+    const handleFxChange = (index, value) => {
         const updatedFx = [...fx]
         updatedFx[index] = parseFloat(value)
         setFx(updatedFx)
+    }
+
+    const calspline = () => {
+        const n = Size
+        // console.log(n)
+        // console.log(xValues)
+        let StepsArray = []
+        let result = 0
+
+        for (let i = 0; i < n - 1; i++) {
+            if (ValueX >= xValues[i] && ValueX <= xValues[i + 1]) {
+                // console.log("hi" ,xValues[i])
+                // console.log(fx[i+1])
+                
+                const slope = ((fx[i + 1] - fx[i]) / ((xValues[i + 1] - xValues[i])))
+                StepsArray.push(`m = \\frac{f(x_{${i + 1}}) - f(x_{${i}})}{x_{${i + 1}} - x_{${i}}} = \\frac{${fx[i + 1]} - ${fx[i]}}{${xValues[i + 1]} - ${xValues[i]}} = ${slope}`);
+                // console.log(slope)
+                result = fx[i] + (slope * (ValueX - xValues[i]))
+                StepsArray.push(`f(${ValueX}) = f(x_{${i}}) + m \\cdot (x - x_{${i}})`);
+                StepsArray.push(`f(${ValueX}) = ${fx[i]} + ${slope} \\cdot (${ValueX} - ${xValues[i]}) = ${result}`);
+
+                console.log(result)
+                break
+            }
+        }
+
+        setSteps(StepsArray)
+
     }
 
     return (
@@ -44,7 +69,7 @@ function Spline() {
             <div>
                 <div className='container1'>
                     <div className='headbi'>
-                        <h1>Newton's Divided Difference</h1>
+                        <h1>Spline interpolation</h1>
                     </div>
                     <div className='inputxlbi'>
                         <div className='input-group'>
@@ -69,11 +94,7 @@ function Spline() {
                     <div className='checkbox-group'>
                         {Array.from({ length: Size }, (_, i) => (
                             <div key={i}>
-                                <input
-                                    type="checkbox"
-                                    checked={selectedPoints[i] || false}
-                                    onChange={() => handleCheckboxChange(i)}
-                                />
+
                                 <span>{i + 1} .</span>
                                 <input
                                     type="number"
@@ -91,7 +112,7 @@ function Spline() {
                         ))}
                     </div>
                     <div className='calbi'>
-                        <button className="btn btn-neutral btn-sm" onClick={calnewton} >
+                        <button className="btn btn-neutral btn-sm" onClick={calspline} >
                             Calculate
                         </button>
                     </div>

@@ -1,4 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Composite from './components/Composite';
+import Compositesim from './components/Compositesim';
 import Cramer from './components/cramer';
 import Elimination from './components/elimination';
 import FalsePosition from './components/false_position';
@@ -10,14 +12,17 @@ import Jacobi from './components/jacobi';
 import Jordan from './components/jordan';
 import Lagrane from './components/Lagrane';
 import Ludecomposition from './components/ludecomposition';
+import Multiple from './components/Multiple';
 import NewtonDD from './components/Newton';
 import Newton from './components/newton_raphson';
 import Onepiont from './components/onepoint_iteration';
 import Regression from './components/regression';
 import Secant from './components/secant';
 import Seidel from './components/seidel';
+import Simpson from './components/Simpson';
 import Spline from './components/spline';
 import TargetPage from './components/test';
+import Trapezoidal from './components/Trapezoidal';
 
 function App() {
     return (
@@ -42,6 +47,11 @@ function App() {
                 <Route path="/Newton" element={<NewtonDD />}/>
                 <Route path="/Spline" element={<Spline />}/>
                 <Route path="/Regression" element={<Regression />}/>
+                <Route path="/Multiple" element={<Multiple />}/>
+                <Route path="/Trapezoidal" element={<Trapezoidal />}/>
+                <Route path="/Composite" element={<Composite />}/>
+                <Route path="/Simpson" element={<Simpson />}/>
+                <Route path="/Compositesim" element={<Compositesim />}/>
             </Routes>
         </Router>
     );

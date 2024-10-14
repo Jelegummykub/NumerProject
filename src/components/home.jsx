@@ -47,9 +47,19 @@ function Home() {
                 navigate('/Spline')
             } else if (select1 === "Extrapolation" && select2 === "Regression") {
                 navigate('/Regression')
+            } else if (select1 === "Extrapolation" && select2 === "Multiple") {
+                navigate('/Multiple')
+            } else if (select1 === "Integration" && select2 === "Trapezoidal") {
+                navigate('/Trapezoidal')
+            }else if (select1 === "Integration" && select2 === "Composite") {
+                navigate('/Composite')
+            }else if (select1 === "Integration" && select2 === "Simpson") {
+                navigate('/Simpson')
+            }else if (select1 === "Integration" && select2 === "Compositesim") {
+                navigate('/Compositesim')
             }
-
-
+            
+            
         }
     }, [select1, select2, navigate]);
 
@@ -85,10 +95,21 @@ function Home() {
         } else if (value === "Extrapolation") {
             setOptions([
                 { value: "Regression", label: "Simple Regression extrapolation" },
+                { value: "Multiple", label: "Multiple Regression extrapolation" },
+
+            ]);
+        } else if (value === "Integration") {
+            setOptions([
+                { value: "Trapezoidal", label: "Single Trapezoidal Rule" },
+                { value: "Composite", label: "Composite Trapezoidal Rule" },
+                { value: "Simpson", label: " Single Simpson's Rule" },
+                { value: "Compositesim", label: " Composite Simpson's Rule" },
+
             ]);
         } else {
             setOptions([]);
         }
+
     };
 
     const handleSelect2Change = (event) => {
@@ -110,6 +131,7 @@ function Home() {
                                 <option value="Linear">Linear Algebra Equation</option>
                                 <option value="Interpolation">Interpolation</option>
                                 <option value="Extrapolation">Extrapolation</option>
+                                <option value="Integration">Integration</option>
                             </select>
                         </div>
                     </div>
