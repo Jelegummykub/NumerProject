@@ -2,7 +2,9 @@ import 'katex/dist/katex.min.css';
 import { evaluate } from 'mathjs';
 import React, { useState } from 'react';
 import { BlockMath } from 'react-katex';
+import Plot from "react-plotly.js";
 import Navbar from './Navbar';
+
 
 function Trapezoidal() {
     const [xstart, setXstrat] = useState(0)
@@ -21,7 +23,7 @@ function Trapezoidal() {
 
 
     const inputXend = (event) => {
-        setXend(event.target.value)
+        setXend(parseFloat(event.target.value))
     }
 
     const calTrapezoidal = () => {
@@ -44,6 +46,46 @@ function Trapezoidal() {
         setSteps(StepsArray);
 
     }
+
+    const getGraphData = () => {
+        const xValues = [];
+        const yValues = [];
+
+        for (let x = xstart - 1; x <= xend + 1; x += 0.1) {
+            xValues.push(x);
+            yValues.push(evaluate(Equation, { x }));
+        }
+
+        return {
+            x: xValues,
+            y: yValues,
+            type: 'scatter',
+            mode: 'lines',
+            line: { color: 'blue' },
+        };
+    };
+
+    const getShadeData = () => {
+        const xFill = [xstart, xend, xend, xstart];
+        const yFill = [
+            0,
+            Number.isNaN(parseFloat(evaluate(Equation, { x: xstart })) ) ? 0 : parseFloat(evaluate(Equation, { x: xstart })),
+            Number.isNaN(parseFloat(evaluate(Equation, { x: xend })) ) ? 0 : parseFloat(evaluate(Equation, { x: xend })),
+            0
+        ];
+        console.log("xFill: ", xFill);
+        console.log("yFill: ", yFill);
+
+        return {
+            x: xFill,
+            y: yFill,
+            fill: 'tozeroy',
+            type: 'scatter',
+            mode: 'lines',
+            fillcolor: 'rgba(0, 100, 255, 0.3)',
+            line: { color: 'rgba(0, 100, 255, 0)' },
+        };
+    };
 
     return (
         <>
@@ -95,6 +137,24 @@ function Trapezoidal() {
                         </button>
                     </div>
                 </div>
+                {Steps.length > 0 && (
+                    <div className='grap'>
+                        <div className='congrap'>
+                            <div className='w-full h-[40vh] md:h-[400px] lg:h-[500px] flex items-center justify-center'>
+                                <Plot
+                                    data={[getGraphData(), getShadeData()]}
+                                    layout={{
+                                        xaxis: { title: 'x' },
+                                        yaxis: { title: 'f(x)' },
+                                        showlegend: false,
+                                    }}
+                                    style={{ width: '100%', height: '100%' }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {Steps.length > 0 && (
                     <div className='table-container'>
                         {Steps.map((step, idx) => (

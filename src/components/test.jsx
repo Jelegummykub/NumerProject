@@ -11,8 +11,8 @@ const Sample = () => {
     const [data, setData] = useState([])
     const [x, setX] = useState(0)
     const [Equation, setEquation] = useState("");
-    const [XL, setXL] = useState(0)
-    const [XR, setXR] = useState(0)
+    const [XL, setXL] = useState(null)
+    const [XR, setXR] = useState(null)
     // const [Error , seterror] = useState(0.000001)
 
     const error = (xold, xnew) => Math.abs((xnew - xold) / xnew);
@@ -123,7 +123,7 @@ const Sample = () => {
                                 type="text"
                                 value={Equation}
                                 onChange={inputEquation}
-                                placeholder="Enter an equation"
+                                placeholder="x^4-13"
                             />
                         </div>
                     </div>
@@ -135,7 +135,7 @@ const Sample = () => {
                                     type="number"
                                     value={XL}
                                     onChange={inputXL}
-                                    placeholder="Enter an X Start"
+                                    placeholder="1.5"
                                 />
                             </div>
                             <div className='input-item'>
@@ -144,7 +144,7 @@ const Sample = () => {
                                     type="number"
                                     value={XR}
                                     onChange={inputXR}
-                                    placeholder="Enter an X End"
+                                    placeholder="2"
                                 />
                             </div>
                             {/* <div className='input-item'>

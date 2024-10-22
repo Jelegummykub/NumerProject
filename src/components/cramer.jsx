@@ -9,15 +9,15 @@ import NAvbar from './Navbar'
 
 const Cramer = () => {
 
-    const [constants, setConstants] = useState(Array(3).fill(0));
+    const [constants, setConstants] = useState(Array(3).fill(null));
     const [dimitions, setdimitions] = useState(3)
-    const [Matrix, setmatrix] = useState(Array(3).fill().map(() => Array(3).fill(0)))
+    const [Matrix, setmatrix] = useState(Array(3).fill().map(() => Array(3).fill(null)))
     const [data, setData] = useState([])
 
     const inputsize = (event) => {
         const size = parseInt(event.target.value)
         setdimitions(size)
-        setmatrix(Array(size).fill().map(() => Array(size).fill(0)))
+        setmatrix(Array(size).fill().map(() => Array(size).fill(null)))
         setConstants(Array(size).fill(0))
     }
 

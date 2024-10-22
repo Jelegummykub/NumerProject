@@ -15,8 +15,8 @@ const Graphicalmethod = () => {
     const [data, setData] = useState([]);
     const [x, setX] = useState(0)
     const [Equation, setEquation] = useState("");
-    const [XL, setXL] = useState(0)
-    const [XR, setXR] = useState(0)
+    const [XL, setXL] = useState(null)
+    const [XR, setXR] = useState(null)
 
     const epsilon = 0.000001;
     const Error = (eq, xValue) => {
@@ -152,7 +152,7 @@ const Graphicalmethod = () => {
                                 type="text"
                                 value={Equation} //x^3-12
                                 onChange={inputEquation} // Equation setEquation
-                                placeholder="Enter an equation"
+                                placeholder="43^x-1"
                             />
                         </div>
                     </div>
@@ -164,7 +164,7 @@ const Graphicalmethod = () => {
                                     type="number"
                                     value={XL}
                                     onChange={inputXL}
-                                    placeholder="Enter an X Start"
+                                    placeholder="0"
                                 />
                             </div>
                             <div className='input-item'>
@@ -173,7 +173,7 @@ const Graphicalmethod = () => {
                                     type="number"
                                     value={XR}
                                     onChange={inputXR}
-                                    placeholder="Enter an X End"
+                                    placeholder="10"
                                 />
                             </div>
                         </div>

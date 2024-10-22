@@ -2,6 +2,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Composite from './components/Composite';
 import Compositesim from './components/Compositesim';
 import Cramer from './components/cramer';
+import Differentiation from './components/divided';
 import Elimination from './components/elimination';
 import FalsePosition from './components/false_position';
 import Gradient from './components/gradient';
@@ -52,6 +53,7 @@ function App() {
                 <Route path="/Composite" element={<Composite />}/>
                 <Route path="/Simpson" element={<Simpson />}/>
                 <Route path="/Compositesim" element={<Compositesim />}/>
+                <Route path="/Differentiation" element={<Differentiation />}/>
             </Routes>
         </Router>
     );

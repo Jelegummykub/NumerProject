@@ -5,8 +5,8 @@ import { BlockMath } from 'react-katex';
 import Navbar from './Navbar';
 
 function Simpson() {
-    const [xstart, setXstrat] = useState(0)
-    const [xend, setXend] = useState(0)
+    const [xstart, setXstrat] = useState(null)
+    const [xend, setXend] = useState(null)
     const [Equation, setEquation] = useState("")
     const [Steps, setSteps] = useState([])
 
@@ -31,8 +31,8 @@ function Simpson() {
         // console.log(Equation)
 
         const f = (x) => {
-            return evaluate(Equation, { x });
-        };
+            return evaluate(Equation, { x })
+        }
 
         const area = (h / 3) * (f(xstart) + (4 * f((xstart + h) / 2)) + f(xend))
         console.log(area)

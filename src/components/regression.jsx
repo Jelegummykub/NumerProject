@@ -2,23 +2,25 @@ import 'katex/dist/katex.min.css';
 import { det } from 'mathjs';
 import React, { useState } from 'react';
 import { BlockMath } from 'react-katex';
+import Plot from "react-plotly.js";
 import Navbar from './Navbar';
-
 
 
 function Regression() {
     const [Size, SetSize] = useState(3)
-    const [ValueX, SetValueX] = useState(0)
+    const [ValueX, SetValueX] = useState(null)
     const [Morder, SetMorder] = useState(1)
-    const [xValues, setXValues] = useState(Array(3).fill(0))
-    const [fx, setFx] = useState(Array(3).fill(0))
+    const [xValues, setXValues] = useState(Array(3).fill(null))
+    const [fx, setFx] = useState(Array(3).fill(null))
     const [Steps, setSteps] = useState([])
+    const [datachart, setDatachart] = useState([])
+    const [datachart1, setDatachart1] = useState([])
 
     const inputsize = (event) => {
         const size = parseInt(event.target.value)
         SetSize(size)
-        setFx(Array(size).fill(0))
-        setXValues(Array(size).fill(0))
+        setFx(Array(size).fill(null))
+        setXValues(Array(size).fill(null))
     }
 
     const inputX = (event) => {
@@ -69,8 +71,10 @@ function Regression() {
         const matrixLatex = `\\begin{bmatrix} ${matrix.map(row => row.join(' & ')).join(' \\\\ ')} \\end{bmatrix}`;
         const constantsLatex = `\\begin{bmatrix} ${matrixB.join(' & ')} \\end{bmatrix}`;
 
-        StepsArray.push(`\\text{Coefficient matrix: } ${matrixLatex}`);
-        StepsArray.push(`\\text{Constants matrix: } ${constantsLatex}`);
+        StepsArray.push(`\\text{Matrix : } ${matrixLatex}`);
+        StepsArray.push(`\\text{Matrix B : } ${constantsLatex}`);
+
+
 
         for (let i = 0; i < matrixSize; i++) {
             const modify = matrix.map(row => [...row])
@@ -81,16 +85,78 @@ function Regression() {
             }
             const detAi = det(modify)
             solutions.push(detAi / detA)
-            StepsArray.push(`x_${i} = \\frac{\\text{det}(A_{${i}})}{\\text{det}(A)} = \\frac{${detAi.toFixed(6)}}{${detA.toFixed(6)}} = ${solutions[i].toFixed(6)}`);
+
+            StepsArray.push(`a_${i} = \\frac{\\text{det}(a_{${i}})}{\\text{det}(A)} = \\frac{${detAi}}{${detA}} = ${solutions[i]}`);
         }
 
         console.log("Solutions:", solutions);
 
         solutions.forEach((solution, i) => {
-            StepsArray.push(`x_${i} = ${solution.toFixed(6)}`)
+            StepsArray.push(`a_${i} = ${solution.toFixed(6)}`)
         })
 
+        let result
+        for (let i = 0; i < m; i++) {
+            StepsArray.push(`f(x) = a${i} + a${i + 1} \\cdot x`)
+        }
+        // console.log(t1)
+        for (let i = 0; i < solutions.length; i++) {
+            result = solutions[0] + (solutions[1] * ValueX)
+            setDatachart(result)
+        }
+        StepsArray.push(`f(${ValueX}) = ${result}`)
+
+        console.log(result)
+
         setSteps(StepsArray)
+
+        const lineYValues = xValues.map(x => {
+            let y = solutions[0];
+            if (m >= 1) {
+                y += solutions[1] * x; // Using only a linear model a0 + a1*x
+            }
+            return y;
+        });
+
+
+
+        setDatachart1(lineYValues)
+    }
+
+
+
+    const chartData = {
+        data: [
+            {
+                type: "scatter",
+                mode: "markers",
+                x:xValues,
+                y:fx,
+                marker: { color: "red" , size: 8  },
+                name: "Point",
+            },
+            {
+                type: "scatter",
+                mode: "lines",
+                x: xValues,
+                y: datachart1,
+                line: { color: "orange" , size: 15 },
+                name: "Regression Line",
+            },
+            {
+                type: "scatter",
+                mode: "markers",
+                x: [ValueX],
+                y: [datachart],
+                marker: { color: "blue", size: 12 },
+                name: `Predicted Point f(${ValueX})`,
+            }
+        ],
+        layout: {
+            title: "Least-Squares Regression Plot",
+            xaxis: { title: 'X' },
+            yaxis: { title: 'f(X)' },
+        }
     }
 
     return (
@@ -117,15 +183,16 @@ function Regression() {
                                     type="number"
                                     value={ValueX}
                                     onChange={inputX}
+                                    placeholder='Enter Value X'
                                 />
                             </div>
-                            <div className='input-item'>
+                            {/* <div className='input-item'>
                                 <label>M order</label>
                                 <input type="number"
                                     value={Morder}
                                     onChange={inputMorder}
                                 />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className='checkbox-group'>
@@ -157,6 +224,20 @@ function Regression() {
                             <BlockMath key={index} math={step} />
                         ))}
                     </div> */}
+                </div>
+                <div className='grap'>
+                    <div className='congrap'>
+                        <div className='w-full h-[40vh] md:h-[400px] lg:h-[500px] flex items-center justify-center'>
+                            <Plot
+                                data={chartData.data}
+                                layout={{
+                                    ...chartData.layout,
+                                    autosize: true,
+                                }}
+                                style={{ width: '100%', height: '100%' }}
+                            />
+                        </div>
+                    </div>
                 </div>
                 {Steps.length > 0 && (
                     <div className='table-container'>

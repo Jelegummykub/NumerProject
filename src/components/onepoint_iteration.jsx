@@ -9,7 +9,7 @@ const Sample = () => {
     const [data, setData] = useState([]);
     const [x, setX] = useState(0)
     const [Equation, setEquation] = useState("");
-    const [XL, setXL] = useState(0)
+    const [XL, setXL] = useState(null)
 
     const error = (xold, xnew) => Math.abs((xnew - xold) / xnew) * 100;
 

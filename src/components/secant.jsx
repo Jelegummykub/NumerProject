@@ -9,8 +9,8 @@ const Sample = () => {
     const [data, setData] = useState([]);
     const [x, setX] = useState(0)
     const [Equation, setEquation] = useState("");
-    const [XL, setXL] = useState(0)
-    const [XR, setXR] = useState(0)
+    const [XL, setXL] = useState(null)
+    const [XR, setXR] = useState(null)
     const [Error, seterror] = useState(0.000001)
     
 

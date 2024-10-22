@@ -57,6 +57,8 @@ function Home() {
                 navigate('/Simpson')
             }else if (select1 === "Integration" && select2 === "Compositesim") {
                 navigate('/Compositesim')
+            }else if (select1 === "Differentiation" && select2 === "Differentiation") {
+                navigate('/Differentiation')
             }
             
             
@@ -106,9 +108,15 @@ function Home() {
                 { value: "Compositesim", label: " Composite Simpson's Rule" },
 
             ]);
+        } else if (value === "Differentiation") {
+            setOptions([
+                { value: "Differentiation", label: "Differentiation" },
+            ]);
         } else {
             setOptions([]);
         }
+        
+       
 
     };
 
@@ -132,6 +140,7 @@ function Home() {
                                 <option value="Interpolation">Interpolation</option>
                                 <option value="Extrapolation">Extrapolation</option>
                                 <option value="Integration">Integration</option>
+                                <option value="Differentiation">Differentiation</option>
                             </select>
                         </div>
                     </div>

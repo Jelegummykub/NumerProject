@@ -15,6 +15,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "better-react-mathjax": "^2.0.3",
     "mathjs": "^13.1.1",
     "plotly.js": "^2.35.2",
     "react": "^18.3.1",

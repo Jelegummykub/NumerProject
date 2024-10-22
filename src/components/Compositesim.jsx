@@ -5,8 +5,8 @@ import { BlockMath } from 'react-katex';
 import Navbar from './Navbar';
 
 function Compositesim() {
-    const [xstart, setXstrat] = useState(0)
-    const [xend, setXend] = useState(0)
+    const [xstart, setXstrat] = useState(null)
+    const [xend, setXend] = useState(null)
     const [ampuntN, setAmountn] = useState(1)
     const [Equation, setEquation] = useState("")
     const [Steps, setSteps] = useState([])
@@ -26,28 +26,39 @@ function Compositesim() {
     }
 
     const inputN = (event) => {
-        setAmountn(parseInt(event.target.value))
+        setAmountn(parseFloat(event.target.value))
     }
 
     const calTrapezoidal = () => {
-        const h = (xend - xstart) / ampuntN
+        let h = (xend - xstart) / ampuntN// 1.5
+        let temph = h / 2
         let area = 0
         const f = (x) => evaluate(Equation, { x })
 
         area += f(xstart) + f(xend);
 
-        for (let i = 1; i < ampuntN; i++) {
-            const x = xstart + i * h;
-            area += (i % 2 === 0 ? 2 : 4) * f(x)
-            console.log(area)
+
+        for (let i = 1; i <= (ampuntN * 2) - 1; i++) {
+            let x = xstart + i * temph; // Current x position
+            if (i % 2 === 0) {
+                console.log("even " , area += 2 * f(x))
+            } else {
+                console.log(" odd" ,area += 4 * f(x))
+            }
+            console.log(x)
         }
 
-        area *= h / 3
+
+
+        area *= temph / 3
+        console.log(area)
+
 
         const StepsArray = [];
         StepsArray.push(`F(x) = \\frac{h}{3} \\cdot \\left(f(a) + f(b) + 4 \\sum_{i=1}^{N-1} f(x_{i}) + 2 \\sum_{i=2}^{N-2} f(x_{i}) \\right)`);
-        StepsArray.push(`h = \\frac{${xend} - ${xstart}}{${ampuntN}} = ${h}`);
-        StepsArray.push(`F(x) = \\frac{${h}}{3} \\cdot \\left(${f(xstart)} + ${f(xend)} + 4 \\cdot \\sum_{i=1}^{${ampuntN - 1}} f(x_{i}) + 2 \\cdot \\sum_{i=2}^{${ampuntN - 2}} f(x_{i}) \\right) = ${area}`);
+        StepsArray.push(`h = \\frac{${xend} - ${xstart}}{${ampuntN}} = ${temph}`)
+        StepsArray.push(`!Tip\\frac{${h}}2 = ${temph}`)
+        StepsArray.push(`F(x) = \\frac{${temph}}{3} \\cdot \\left(${f(xstart)} + ${f(xend)} + 4 \\cdot \\sum_{i=1}^{${ampuntN - 1}} f(x_{i}) + 2 \\cdot \\sum_{i=2}^{${ampuntN - 2}} f(x_{i}) \\right) = ${area}`);
 
         setSteps(StepsArray);
 
