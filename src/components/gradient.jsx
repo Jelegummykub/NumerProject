@@ -1,5 +1,6 @@
 import { faRedo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import 'katex/dist/katex.min.css';
 import React, { useState } from 'react';
 import { BlockMath } from 'react-katex';
@@ -14,6 +15,45 @@ function Gradient() {
     const [Matrix, SetMatrix] = useState(Array(3).fill().map(() => Array(3).fill(0)))
     const [StartX, SetStartX] = useState(Array(3).fill(0))
     const [data, setData] = useState([])
+
+    const fetchRandomMatrix = async () => {
+        try {
+          const response = await axios.get('http://localhost:3002/infomatrix/matrix');
+          console.log(response.data)
+    
+          if (response.data.result && response.data.data && Array.isArray(response.data.data)) {
+            const equations = response.data.data;
+    
+            console.log("Equations:", equations)
+    
+            if (equations.length > 0) {
+              const randomIndex = Math.floor(Math.random() * equations.length)
+              const randomEquation = equations[randomIndex]
+    
+              const cleanedMatrixString = randomEquation.matrix.replace(/(^"|"$)/g, '')
+              const cleanedConstantsString = randomEquation.constants.replace(/(^"|"$)/g, '')
+    
+              const parsedMatrix = JSON.parse(cleanedMatrixString)
+              const parsedConstants = JSON.parse(cleanedConstantsString)
+    
+              if (Array.isArray(parsedMatrix) && Array.isArray(parsedConstants)) {
+                const matrixSize = parsedMatrix.length
+                SetMatrix(parsedMatrix)
+                SetAnswer(parsedConstants)
+                setdimitions(matrixSize)
+              } else {
+                console.error("Parsed matrix or constants are not arrays", parsedMatrix, parsedConstants)
+              }
+            } else {
+              console.error("No equations found in response data")
+            }
+          } else {
+            console.error("Unexpected response structure", response.data)
+          }
+        } catch (error) {
+          console.error("Error fetching random equation", error)
+        }
+      }
 
     const inputsize = (event) => {
         const size = parseInt(event.target.value)
@@ -186,6 +226,11 @@ function Gradient() {
                         <div>
                             <button className="btn btn-neutral btn-sm" onClick={calculategradient} >
                                 Calculate
+                            </button>
+                        </div>
+                        <div>
+                            <button className="btn btn-sm btn-warning" onClick={fetchRandomMatrix}>
+                                Random
                             </button>
                         </div>
                     </div>

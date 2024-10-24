@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { evaluate } from 'mathjs';
 import React, { useState } from 'react';
 import Plot from "react-plotly.js";
@@ -12,7 +13,26 @@ const Sample = () => {
     const [XR, setXR] = useState(null)
     // const [Error, seterror] = useState(0.000001)
 
-    const [datachart, setDatachart] = useState([]);
+    const [datachart, setDatachart] = useState([])
+
+    const fetchRandomEquation = async () => {
+        try {
+            const response = await axios.get('http://localhost:3002/info/root')
+            if(response.data.result){
+                const equation = response.data.data
+                const randomIndex  =Math.floor(Math.random() * equation.length)
+                const randomEquation = equation[randomIndex].equation
+                setEquation(randomEquation)
+                setXL("")
+                setXR("")
+                setData([])
+                setDatachart([])
+                setX(0)
+            }
+        } catch (error) {
+
+        }
+    }
 
     const error = (xold, xnew) => Math.abs((xnew - xold) / xnew) * 100;
 
@@ -135,6 +155,11 @@ const Sample = () => {
                                 onChange={inputEquation}
                                 placeholder="x^4-13"
                             />
+                        </div>
+                        <div className='calbi'>
+                            <button className="btn btn-neutral btn-s " onClick={fetchRandomEquation}>
+                                random
+                            </button>
                         </div>
                     </div>
                     <div className='inputxlbi'>
