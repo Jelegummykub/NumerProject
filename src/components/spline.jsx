@@ -1,3 +1,4 @@
+import axios from 'axios';
 import 'katex/dist/katex.min.css';
 import React, { useState } from 'react';
 import { BlockMath } from 'react-katex';
@@ -10,6 +11,45 @@ function Spline() {
     const [fx, setFx] = useState(Array(3).fill(0))
     const [Steps, setSteps] = useState([])
 
+    const fetchRandominterpolation = async () => {
+        try {
+            const response = await axios.get('http://localhost:3002/infointer/interpolation')
+
+            if (response.data.result && response.data.data && Array.isArray(response.data.data)) {
+                const equation = response.data.data
+            console.log(equation)
+
+
+                if (equation.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * equation.length)
+                    const randomEquation = equation[randomIndex]
+
+                    const rejaxvaluexsring = randomEquation.valuex.replace(/(^"|"$)/g, '')
+                    const rejaxfxsring = randomEquation.fx.replace(/(^"|"$)/g, '')
+
+                    const parsedvaluex = JSON.parse(rejaxvaluexsring)
+                    const parsedfx = JSON.parse(rejaxfxsring)
+
+                    if (Array.isArray(parsedvaluex) && Array.isArray(parsedfx)) {
+                        const size = parsedvaluex.length
+                        console.log(size)
+                        setXValues(parsedvaluex)
+                        setFx(parsedfx)
+                        SetSize(size)
+                    } else {
+                        console.error("Parsed matrix or constants are not arrays", parsedvaluex, parsedfx)
+                    }
+                } else {
+                    console.error("No equations found in response data")
+                }
+            } else {
+                console.error("Unexpected response structure", response.data)
+            }
+        } catch (error) {
+            console.error("Error fetching random equation", error)
+        }
+    }
+
     const inputsize = (event) => {
         const size = parseInt(event.target.value)
         SetSize(size)
@@ -20,8 +60,6 @@ function Spline() {
     const inputX = (event) => {
         SetValueX(event.target.value)
     }
-
-
 
     const handleXChange = (index, value) => {
         const updatedX = [...xValues]
@@ -90,6 +128,11 @@ function Spline() {
                                 />
                             </div>
                         </div>
+                    </div>
+                    <div className='calbi'>
+                        <button className="btn btn-sm btn-warning" onClick={fetchRandominterpolation}>
+                            Random
+                        </button>
                     </div>
                     <div className='checkbox-group'>
                         {Array.from({ length: Size }, (_, i) => (

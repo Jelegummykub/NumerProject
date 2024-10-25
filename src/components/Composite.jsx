@@ -1,3 +1,4 @@
+import axios from 'axios';
 import 'katex/dist/katex.min.css';
 import { evaluate } from 'mathjs';
 import React, { useState } from 'react';
@@ -12,6 +13,23 @@ function Composite() {
     const [Equation, setEquation] = useState("")
     const [Steps, setSteps] = useState([])
     const [datachart, setDatachart] = useState([])
+
+    const fetchRandomEquation = async () => {
+        try {
+            const response = await axios.get('http://localhost:3002/integrateq/value')
+            if (response.data.result) {
+                const equations = response.data.data
+                const randomIndex = Math.floor(Math.random() * equations.length)
+                const randomEquation = equations[randomIndex].equationintegrat
+                setEquation(randomEquation)
+                setXstrat("")
+                setXend("")
+                setSteps([])
+            }
+        } catch (error) {
+
+        }
+    }
 
 
     const inputEquation = (event) => {
@@ -116,7 +134,7 @@ function Composite() {
                                     type="number"
                                     value={xstart}
                                     onChange={inputXstart}
-                                    placeholder="Enter an X Start"
+                                    placeholder="2"
                                 />
                             </div>
                             <div className='input-item'>
@@ -125,7 +143,7 @@ function Composite() {
                                     type="number"
                                     value={xend}
                                     onChange={inputXend}
-                                    placeholder="Enter an X End"
+                                    placeholder="8"
                                 />
                             </div>
                             <div className='input-item'>
@@ -141,6 +159,9 @@ function Composite() {
                         </div>
                     </div>
                     <div className='calbi'>
+                        <button className="btn btn-sm btn-warning" onClick={fetchRandomEquation}>
+                            Random
+                        </button>
                         <button className="btn btn-neutral btn-sm" onClick={calTrapezoidal}>
                             Calculate
                         </button>

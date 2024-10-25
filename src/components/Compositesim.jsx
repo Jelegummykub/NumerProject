@@ -1,3 +1,4 @@
+import axios from 'axios';
 import 'katex/dist/katex.min.css';
 import { evaluate } from 'mathjs';
 import React, { useState } from 'react';
@@ -10,6 +11,24 @@ function Compositesim() {
     const [ampuntN, setAmountn] = useState(1)
     const [Equation, setEquation] = useState("")
     const [Steps, setSteps] = useState([])
+
+
+    const fetchRandomEquation = async () => {
+        try {
+            const response = await axios.get('http://localhost:3002/integrateq/value')
+            if (response.data.result) {
+                const equations = response.data.data
+                const randomIndex = Math.floor(Math.random() * equations.length)
+                const randomEquation = equations[randomIndex].equationintegrat
+                setEquation(randomEquation)
+                setXstrat("")
+                setXend("")
+                setSteps([])
+            }
+        } catch (error) {
+
+        }
+    }
 
 
     const inputEquation = (event) => {
@@ -41,9 +60,9 @@ function Compositesim() {
         for (let i = 1; i <= (ampuntN * 2) - 1; i++) {
             let x = xstart + i * temph; // Current x position
             if (i % 2 === 0) {
-                console.log("even " , area += 2 * f(x))
+                console.log("even ", area += 2 * f(x))
             } else {
-                console.log(" odd" ,area += 4 * f(x))
+                console.log(" odd", area += 4 * f(x))
             }
             console.log(x)
         }
@@ -93,7 +112,7 @@ function Compositesim() {
                                     type="number"
                                     value={xstart}
                                     onChange={inputXstart}
-                                    placeholder="Enter an X Start"
+                                    placeholder="-1"
                                 />
                             </div>
                             <div className='input-item'>
@@ -102,7 +121,7 @@ function Compositesim() {
                                     type="number"
                                     value={xend}
                                     onChange={inputXend}
-                                    placeholder="Enter an X End"
+                                    placeholder="2"
                                 />
                             </div>
                             <div className='input-item'>
@@ -118,6 +137,9 @@ function Compositesim() {
                         </div>
                     </div>
                     <div className='calbi'>
+                        <button className="btn btn-sm btn-warning" onClick={fetchRandomEquation}>
+                            Random
+                        </button>
                         <button className="btn btn-neutral btn-sm" onClick={calTrapezoidal}>
                             Calculate
                         </button>

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import 'katex/dist/katex.min.css';
 import { evaluate } from 'mathjs';
 import React, { useState } from 'react';
@@ -7,12 +8,27 @@ import Navbar from './Navbar';
 
 
 function Trapezoidal() {
-    const [xstart, setXstrat] = useState(0)
-    const [xend, setXend] = useState(0)
+    const [xstart, setXstrat] = useState(null)
+    const [xend, setXend] = useState(null)
     const [Equation, setEquation] = useState("")
     const [Steps, setSteps] = useState([])
 
+    const fetchRandomEquation = async () => {
+        try {
+            const response = await axios.get('http://localhost:3002/integrateq/value')
+            if (response.data.result) {
+                const equations = response.data.data
+                const randomIndex = Math.floor(Math.random() * equations.length)
+                const randomEquation = equations[randomIndex].equationintegrat
+                setEquation(randomEquation)
+                setXstrat("")
+                setXend("")
+                setSteps([])
+            }
+        } catch (error) {
 
+        }
+    }
     const inputEquation = (event) => {
         setEquation(event.target.value)
     }
@@ -69,8 +85,8 @@ function Trapezoidal() {
         const xFill = [xstart, xend, xend, xstart];
         const yFill = [
             0,
-            Number.isNaN(parseFloat(evaluate(Equation, { x: xstart })) ) ? 0 : parseFloat(evaluate(Equation, { x: xstart })),
-            Number.isNaN(parseFloat(evaluate(Equation, { x: xend })) ) ? 0 : parseFloat(evaluate(Equation, { x: xend })),
+            Number.isNaN(parseFloat(evaluate(Equation, { x: xstart }))) ? 0 : parseFloat(evaluate(Equation, { x: xstart })),
+            Number.isNaN(parseFloat(evaluate(Equation, { x: xend }))) ? 0 : parseFloat(evaluate(Equation, { x: xend })),
             0
         ];
         console.log("xFill: ", xFill);
@@ -116,7 +132,7 @@ function Trapezoidal() {
                                     type="number"
                                     value={xstart}
                                     onChange={inputXstart}
-                                    placeholder="Enter an X Start"
+                                    placeholder="2"
                                 />
                             </div>
                             <div className='input-item'>
@@ -125,13 +141,16 @@ function Trapezoidal() {
                                     type="number"
                                     value={xend}
                                     onChange={inputXend}
-                                    placeholder="Enter an X End"
+                                    placeholder="8"
                                 />
                             </div>
 
                         </div>
                     </div>
                     <div className='calbi'>
+                        <button className="btn btn-sm btn-warning" onClick={fetchRandomEquation}>
+                            Random
+                        </button>
                         <button className="btn btn-neutral btn-sm" onClick={calTrapezoidal}>
                             Calculate
                         </button>
