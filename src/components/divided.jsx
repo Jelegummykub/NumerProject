@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { evaluate } from 'mathjs';
 import React, { useState } from 'react';
 import { BlockMath } from 'react-katex';
@@ -11,6 +12,26 @@ function Divided() {
     const [inputX, setinputX] = useState(null)
     const [inputH, setinputH] = useState(null)
     const [Steps, setSteps] = useState([])
+
+    const fetchRandomEquation = async () => {
+        try {
+            const response = await axios.get('http://localhost:3002/diff/diffeq')
+            if (response.data.result) {
+                const equation = response.data.data
+                const randomIndex = Math.floor(Math.random() * equation.length)
+                const randomEquation = equation[randomIndex].equationdiff
+                setEquation(randomEquation)
+                setinputX("")
+                setSelectOrder("")
+                setselectError("")
+                setSelectDirection("")
+                setinputH("")
+                setSteps([])
+            }
+        } catch (error) {
+            console.error("Error fetching random equation", error)
+        }
+    }
 
 
     const inputXX = (event) => {
@@ -518,7 +539,7 @@ function Divided() {
                                     type="number"
                                     value={inputX}
                                     onChange={inputXX}
-                                    placeholder="Enter an X"
+                                    placeholder="2"
                                 />
                             </div>
                             <div className='input-item'>
@@ -527,12 +548,15 @@ function Divided() {
                                     type="number"
                                     value={inputH}
                                     onChange={inputHH}
-                                    placeholder="Enter an h"
+                                    placeholder="0.25"
                                 />
                             </div>
                         </div>
                     </div>
                     <div className='calbi'>
+                        <button className="btn btn-sm btn-warning" onClick={fetchRandomEquation}>
+                            Random
+                        </button>
                         <button className="btn btn-neutral btn-sm" onClick={caldifferent}>
                             Calculate
                         </button>

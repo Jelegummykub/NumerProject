@@ -17,6 +17,7 @@ import Multiple from './components/Multiple';
 import NewtonDD from './components/Newton';
 import Newton from './components/newton_raphson';
 import Onepiont from './components/onepoint_iteration';
+import Polyregression from './components/polyregression';
 import Regression from './components/regression';
 import Secant from './components/secant';
 import Seidel from './components/seidel';
@@ -54,6 +55,7 @@ function App() {
                 <Route path="/Simpson" element={<Simpson />}/>
                 <Route path="/Compositesim" element={<Compositesim />}/>
                 <Route path="/Differentiation" element={<Differentiation />}/>
+                <Route path="/Polyregression" element={<Polyregression />}/>
             </Routes>
         </Router>
     );

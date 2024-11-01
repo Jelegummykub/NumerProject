@@ -1,15 +1,20 @@
 import axios from 'axios';
 import 'katex/dist/katex.min.css';
+import { det } from 'mathjs';
 import React, { useState } from 'react';
 import { BlockMath } from 'react-katex';
+import Plot from "react-plotly.js";
 import Navbar from './Navbar';
 
-function Spline() {
+function Polyregression() {
     const [Size, SetSize] = useState(3)
-    const [ValueX, SetValueX] = useState(0)
-    const [xValues, setXValues] = useState(Array(3).fill(0))
-    const [fx, setFx] = useState(Array(3).fill(0))
+    const [ValueX, SetValueX] = useState(null)
+    const [Morder, SetMorder] = useState(2)
+    const [xValues, setXValues] = useState(Array(3).fill(null))
+    const [fx, setFx] = useState(Array(3).fill(null))
     const [Steps, setSteps] = useState([])
+    const [datachart, setDatachart] = useState([])
+    const [datachart1, setDatachart1] = useState([])
 
     const fetchRandominterpolation = async () => {
         try {
@@ -17,7 +22,7 @@ function Spline() {
 
             if (response.data.result && response.data.data && Array.isArray(response.data.data)) {
                 const equation = response.data.data
-            console.log(equation)
+                console.log(equation)
 
 
                 if (equation.length > 0) {
@@ -53,18 +58,16 @@ function Spline() {
     const inputsize = (event) => {
         const size = parseInt(event.target.value)
         SetSize(size)
-        setXValues(Array(size).fill(0))
-        setFx(Array(size).fill(0))
+        setFx(Array(size).fill(null))
+        setXValues(Array(size).fill(null))
     }
 
     const inputX = (event) => {
         SetValueX(event.target.value)
     }
 
-    const handleXChange = (index, value) => {
-        const updatedX = [...xValues]
-        updatedX[index] = parseFloat(value)
-        setXValues(updatedX)
+    const inputMorder = (event) => {
+        SetMorder((parseInt(event.target.value)))
     }
 
     const handleFxChange = (index, value) => {
@@ -73,40 +76,102 @@ function Spline() {
         setFx(updatedFx)
     }
 
-    const calspline = () => {
-        const n = Size
-        // console.log(n)
-        // console.log(xValues)
-        let StepsArray = []
-        let result = 0
+    const handleXChange = (index, value) => {
+        const updatedX = [...xValues]
+        updatedX[index] = parseFloat(value)
+        setXValues(updatedX)
+    }
 
-        let m = []
-        for(let i = 0 ; i < n-1 ; i++){
-            m[i] = (fx[i+1] - fx[i])/(xValues[i+1] - xValues[i])
-            console.log(parseFloat(m[i]))
-            // console.log(xValues[i])
+    const calLeast = () => {
+        let StepsArray = [];
+        const m = parseInt(Morder);
+        const matrixSize = m + 1;
+        const matrix = Array.from({ length: matrixSize }, () => Array(matrixSize).fill(0));
+        const matrixB = Array(matrixSize).fill(0);
 
-        }
-
-        for (let i = 0; i < n-1 ; i++) {
-            if (ValueX >= xValues[i]  && ValueX <= xValues[i+1] ) {
-                // console.log("hi" ,xValues[i])
-                // console.log(fx[i+1])
-                
-                const slope = ((fx[i + 1] - fx[i]) / ((xValues[i + 1] - xValues[i])))
-                StepsArray.push(`m = \\frac{f(x_{${i + 1}}) - f(x_{${i}})}{x_{${i + 1}} - x_{${i}}} = \\frac{${fx[i + 1]} - ${fx[i]}}{${xValues[i + 1]} - ${xValues[i]}} = ${m[i]}`);
-                // console.log(slope)
-                result = fx[i] + (m[i] * (ValueX - xValues[i]))
-                StepsArray.push(`f(${ValueX}) = f(x_{${i}}) + m \\cdot (x - x_{${i}})`);
-                StepsArray.push(`f(${ValueX}) = ${fx[i]} + ${m[i+1]} \\cdot (${ValueX} - ${xValues[i]}) = ${result}`);
-
-                console.log("sds"+result)
-                break
+        for (let i = 0; i < matrixSize; i++) {
+            for (let j = 0; j < matrixSize; j++) {
+                matrix[i][j] = xValues.reduce((acc, x) => acc + Math.pow(x, i + j), 0);
             }
+            matrixB[i] = xValues.reduce((acc, x, index) => acc + fx[index] * Math.pow(x, i), 0);
         }
+
+        const detA = det(matrix);
+        const solutions = [];
+        const matrixLatex = `\\begin{bmatrix} ${matrix.map(row => row.join(' & ')).join(' \\\\ ')} \\end{bmatrix}`;
+        const constantsLatex = `\\begin{bmatrix} ${matrixB.join(' & ')} \\end{bmatrix}`;
+        StepsArray.push(`\\text{Matrix : } ${matrixLatex}`);
+        StepsArray.push(`\\text{Matrix B : } ${constantsLatex}`);
+
+        for (let i = 0; i < matrixSize; i++) {
+            const modify = matrix.map(row => [...row]);
+            for (let j = 0; j < matrixSize; j++) {
+                modify[j][i] = matrixB[j];
+            }
+            const detAi = det(modify);
+            solutions.push(detAi / detA);
+
+            StepsArray.push(`a_${i} = \\frac{\\text{det}(a_{${i}})}{\\text{det}(A)} = \\frac{${detAi}}{${detA}} = ${solutions[i]}`);
+        }
+
+        let result = solutions[0];
+        StepsArray.push(`f(x) = ${solutions[0].toFixed(6)}`)
+
+        for (let i = 1; i <= m; i++) {
+            result += solutions[i] * Math.pow(ValueX, i);
+            StepsArray.push(` + ${solutions[i].toFixed(6)} \\cdot x^{${i}}`)
+        }
+
+        setDatachart(result);
+        StepsArray.push(`f(${ValueX}) = ${result}`)
 
         setSteps(StepsArray)
 
+        const lineYValues = xValues.map(x => {
+            let y = solutions[0];
+            for (let i = 1; i <= m; i++) {
+                y += solutions[i] * Math.pow(x, i)
+            }
+            return y
+        })
+
+        setDatachart1(lineYValues);
+    }
+
+
+
+    const chartData = {
+        data: [
+            {
+                type: "scatter",
+                mode: "markers",
+                x: xValues,
+                y: fx,
+                marker: { color: "red", size: 8 },
+                name: "Point",
+            },
+            {
+                type: "scatter",
+                mode: "lines",
+                x: xValues,
+                y: datachart1,
+                line: { color: "orange", size: 15 },
+                name: "Regression Line",
+            },
+            {
+                type: "scatter",
+                mode: "markers",
+                x: [ValueX],
+                y: [datachart],
+                marker: { color: "blue", size: 12 },
+                name: `Predicted Point f(${ValueX})`,
+            }
+        ],
+        layout: {
+            title: "Least-Squares Regression Plot",
+            xaxis: { title: 'X' },
+            yaxis: { title: 'f(X)' },
+        }
     }
 
     return (
@@ -115,7 +180,7 @@ function Spline() {
             <div>
                 <div className='container1'>
                     <div className='headbi'>
-                        <h1>Spline interpolation</h1>
+                        <h1>Least-Squares Regression</h1>
                     </div>
                     <div className='inputxlbi'>
                         <div className='input-group'>
@@ -133,6 +198,14 @@ function Spline() {
                                     type="number"
                                     value={ValueX}
                                     onChange={inputX}
+                                    placeholder='Enter Value X'
+                                />
+                            </div>
+                            <div className='input-item'>
+                                <label>M order</label>
+                                <input type="number"
+                                    value={Morder}
+                                    onChange={inputMorder}
                                 />
                             </div>
                         </div>
@@ -145,7 +218,6 @@ function Spline() {
                     <div className='checkbox-group'>
                         {Array.from({ length: Size }, (_, i) => (
                             <div key={i}>
-
                                 <span>{i + 1} .</span>
                                 <input
                                     type="number"
@@ -163,7 +235,7 @@ function Spline() {
                         ))}
                     </div>
                     <div className='calbi'>
-                        <button className="btn btn-neutral btn-sm" onClick={calspline} >
+                        <button className="btn btn-neutral btn-sm" onClick={calLeast} >
                             Calculate
                         </button>
                     </div>
@@ -172,6 +244,20 @@ function Spline() {
                             <BlockMath key={index} math={step} />
                         ))}
                     </div> */}
+                </div>
+                <div className='grap'>
+                    <div className='congrap'>
+                        <div className='w-full h-[40vh] md:h-[400px] lg:h-[500px] flex items-center justify-center'>
+                            <Plot
+                                data={chartData.data}
+                                layout={{
+                                    ...chartData.layout,
+                                    autosize: true,
+                                }}
+                                style={{ width: '100%', height: '100%' }}
+                            />
+                        </div>
+                    </div>
                 </div>
                 {Steps.length > 0 && (
                     <div className='table-container'>
@@ -183,9 +269,8 @@ function Spline() {
                     </div>
                 )}
             </div>
-
         </>
     )
 }
 
-export default Spline
+export default Polyregression

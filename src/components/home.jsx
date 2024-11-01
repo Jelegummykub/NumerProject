@@ -59,6 +59,8 @@ function Home() {
                 navigate('/Compositesim')
             }else if (select1 === "Differentiation" && select2 === "Differentiation") {
                 navigate('/Differentiation')
+            }else if (select1 === "Extrapolation" && select2 === "Polyregression") {
+                navigate('/Polyregression')
             }
             
             
@@ -97,6 +99,7 @@ function Home() {
         } else if (value === "Extrapolation") {
             setOptions([
                 { value: "Regression", label: "Simple Regression extrapolation" },
+                { value: "Polyregression", label: "Polynomial Regression extrapolation" },
                 { value: "Multiple", label: "Multiple Regression extrapolation" },
 
             ]);
