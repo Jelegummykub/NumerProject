@@ -17,7 +17,7 @@ const Cramer = () => {
 
     const fetchRandomMatrix = async () => {
         try {
-            const response = await axios.get('http://localhost:3002/infomatrix/matrix');
+            const response = await axios.get('http://localhost:4000/infomatrix/matrix');
             console.log(response.data)
 
             if (response.data.result && response.data.data && Array.isArray(response.data.data)) {

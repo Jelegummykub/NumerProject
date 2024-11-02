@@ -3,7 +3,9 @@ import 'katex/dist/katex.min.css';
 import { evaluate } from 'mathjs';
 import React, { useState } from 'react';
 import { BlockMath } from 'react-katex';
+import Plot from "react-plotly.js";
 import Navbar from './Navbar';
+
 
 function Compositesim() {
     const [xstart, setXstrat] = useState(null)
@@ -11,11 +13,12 @@ function Compositesim() {
     const [ampuntN, setAmountn] = useState(1)
     const [Equation, setEquation] = useState("")
     const [Steps, setSteps] = useState([])
+    const [chartdata, Setchartdata] = useState([])
 
 
     const fetchRandomEquation = async () => {
         try {
-            const response = await axios.get('http://localhost:3002/integrateq/value')
+            const response = await axios.get('http://localhost:4000/integrateq/value')
             if (response.data.result) {
                 const equations = response.data.data
                 const randomIndex = Math.floor(Math.random() * equations.length)
@@ -54,15 +57,28 @@ function Compositesim() {
         let area = 0
         const f = (x) => evaluate(Equation, { x })
 
+        let chart = []
         area += f(xstart) + f(xend);
+        chart.push({
+            x: xstart,
+            y: area,
+        })
 
 
         for (let i = 1; i <= (ampuntN * 2) - 1; i++) {
             let x = xstart + i * temph; // Current x position
             if (i % 2 === 0) {
                 console.log("even ", area += 2 * f(x))
+                chart.push({
+                    x: x,
+                    y: area,
+                })
             } else {
                 console.log(" odd", area += 4 * f(x))
+                chart.push({
+                    x: x,
+                    y: area,
+                })
             }
             console.log(x)
         }
@@ -80,7 +96,42 @@ function Compositesim() {
         StepsArray.push(`F(x) = \\frac{${temph}}{3} \\cdot \\left(${f(xstart)} + ${f(xend)} + 4 \\cdot \\sum_{i=1}^{${ampuntN - 1}} f(x_{i}) + 2 \\cdot \\sum_{i=2}^{${ampuntN - 2}} f(x_{i}) \\right) = ${area}`);
 
         setSteps(StepsArray);
+        Setchartdata(chart)
 
+    }
+
+
+    const getGraphData = {
+        data: [{
+            name: "F(x)",
+            x: chartdata.map((data) => data.x),
+            y: chartdata.map((data) => data.y),
+            type: "scatter",
+            mode: "lines",
+            line: { color: "green" },
+        },
+        {
+            name: "Area",
+            x: chartdata.map((point) => point.x),
+            y: chartdata.map((point) => point.y),
+            fill: "tozeroy",
+            type: "scatter",
+            mode: "lines",
+            fillcolor: "rgba(0, 100, 255, 0.3)",
+            line: { color: "rgba(0, 100, 255, 0)" },
+        }
+        ],
+        layout: {
+            title: "Simpson's Rule",
+            xaxis: {
+                title: "X",
+                showline: true,
+            },
+            yaxis: {
+                title: "Y",
+                showline: true,
+            },
+        },
     }
 
     return (
@@ -154,6 +205,21 @@ function Compositesim() {
                         ))}
                     </div>
                 )}
+                <div className='grap'>
+                    <div className='congrap'>
+                        <div className='w-full h-[40vh] md:h-[400px] lg:h-[500px] flex items-center justify-center'>
+                            <Plot
+                                data={getGraphData.data}
+                                layout={{
+                                    xaxis: { title: 'x' },
+                                    yaxis: { title: 'f(x)' },
+                                    showlegend: false,
+                                }}
+                                style={{ width: '100%', height: '100%' }}
+                            />
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </>

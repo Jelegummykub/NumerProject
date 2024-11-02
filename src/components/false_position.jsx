@@ -17,7 +17,7 @@ const Sample = () => {
 
     const fetchRandomEquation = async () => {
         try {
-            const response = await axios.get('http://localhost:3002/info/root')
+            const response = await axios.get('http://localhost:4000/info/root')
             if(response.data.result){
                 const equation = response.data.data
                 const randomIndex  =Math.floor(Math.random() * equation.length)

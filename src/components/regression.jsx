@@ -18,7 +18,7 @@ function Regression() {
 
     const fetchRandominterpolation = async () => {
         try {
-            const response = await axios.get('http://localhost:3002/infointer/interpolation')
+            const response = await axios.get('http://localhost:4000/infointer/interpolation')
 
             if (response.data.result && response.data.data && Array.isArray(response.data.data)) {
                 const equation = response.data.data
@@ -152,7 +152,7 @@ function Regression() {
         const lineYValues = xValues.map(x => {
             let y = solutions[0];
             if (m >= 1) {
-                y += solutions[1] * x; // Using only a linear model a0 + a1*x
+                y += solutions[1] * x
             }
             return y;
         });

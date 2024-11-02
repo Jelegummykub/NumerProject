@@ -16,7 +16,7 @@ function Composite() {
 
     const fetchRandomEquation = async () => {
         try {
-            const response = await axios.get('http://localhost:3002/integrateq/value')
+            const response = await axios.get('http://localhost:4000/integrateq/value')
             if (response.data.result) {
                 const equations = response.data.data
                 const randomIndex = Math.floor(Math.random() * equations.length)

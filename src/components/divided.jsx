@@ -15,7 +15,7 @@ function Divided() {
 
     const fetchRandomEquation = async () => {
         try {
-            const response = await axios.get('http://localhost:3002/diff/diffeq')
+            const response = await axios.get('http://localhost:4000/diff/diffeq')
             if (response.data.result) {
                 const equation = response.data.data
                 const randomIndex = Math.floor(Math.random() * equation.length)

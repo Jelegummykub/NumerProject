@@ -14,7 +14,7 @@ function Newton() {
 
     const fetchRandominterpolation = async () => {
         try {
-            const response = await axios.get('http://localhost:3002/infointer/interpolation')
+            const response = await axios.get('http://localhost:4000/infointer/interpolation')
 
             if (response.data.result && response.data.data && Array.isArray(response.data.data)) {
                 const equation = response.data.data
